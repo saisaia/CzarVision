@@ -1,11 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CzarVision — Movies & TV</title>
+
+  <!-- favicon (put your logo file in repo) -->
   <link rel="icon" href="czarvision-logo.png" />
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- main stylesheet -->
+  <link rel="stylesheet" href="home.css" />
+
+  <!-- defer script so DOM exists -->
+  <script src="home.js" defer></script>
 </head>
 <body>
   <header class="navbar" role="banner">
@@ -15,28 +22,30 @@
     </a>
 
     <div class="nav-actions">
-      <button class="icon-btn" id="search-open" aria-label="Open search (press /)">&#128269;</button>
+      <button id="search-open" class="icon-btn" title="Search (press /)">🔍</button>
     </div>
   </header>
 
   <main>
+    <!-- banner -->
     <section id="banner" class="banner" aria-label="Featured">
       <div class="banner-inner">
-        <h1 id="banner-title">Loading...</h1>
+        <h1 id="banner-title">Loading featured...</h1>
         <div class="banner-meta">
           <span id="banner-year"></span>
           <span id="banner-rating"></span>
         </div>
         <div class="banner-cta">
-          <button class="cta" id="banner-play">Watch Trailer</button>
+          <button class="cta" id="banner-play">Watch</button>
         </div>
       </div>
     </section>
 
-    <section class="container">
+    <!-- content -->
+    <section class="container" aria-live="polite">
       <div class="row">
         <h2>Trending Movies</h2>
-        <div id="movies-list" class="list" aria-live="polite"></div>
+        <div id="movies-list" class="list"></div>
       </div>
 
       <div class="row">
@@ -51,15 +60,16 @@
     </section>
   </main>
 
-  <!-- Details Modal -->
+  <!-- Details modal -->
   <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-label="Details dialog">
     <div class="modal-content" role="document">
-      <button class="close-btn" id="modal-close" aria-label="Close dialog">✕</button>
+      <button class="close-btn" id="modal-close" aria-label="Close">✕</button>
+
       <div class="modal-body">
         <img id="modal-image" src="" alt="Poster" />
         <div class="modal-text">
           <h3 id="modal-title">Title</h3>
-          <p id="modal-description" class="muted">Description</p>
+          <p id="modal-description" class="muted">Overview</p>
           <div class="meta-line">
             <span id="modal-rating" class="stars"></span>
             <select id="server" class="server-select" aria-label="Choose server">
@@ -77,12 +87,12 @@
     </div>
   </div>
 
-  <!-- Search Modal -->
+  <!-- Search modal -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-panel" role="search">
-      <button class="close-search" id="search-close" aria-label="Close search">✕</button>
+      <button id="search-close" class="close-search" aria-label="Close search">✕</button>
       <input id="search-input" class="search-input" placeholder="Search movies, TV, anime..." aria-label="Search" />
-      <div id="search-results" class="search-results" aria-live="polite"></div>
+      <div id="search-results" class="search-results"></div>
     </div>
   </div>
 
@@ -96,7 +106,5 @@
       </div>
     </div>
   </footer>
-
-  <script src="script.js" defer></script>
 </body>
 </html>
