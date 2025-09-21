@@ -1,50 +1,41 @@
-// ================== API CONFIG ==================
 const API_KEY = 'a1e72fd93ed59f56e6332813b9f8dcae';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
+let currentItem;
 
-let currentItem = null;
-let bannerItems = [];
-let bannerIndex = 0;
-
-// ================== FETCH HELPERS ==================
-async function fetchData(url) {
-  const res = await fetch(url);
-  return res.json();
-}
-
+// ================== Fetch Functions ==================
 async function fetchTrending(type) {
-  const data = await fetchData(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+  const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+  const data = await res.json();
   return data.results;
 }
 
-async function fetchByGenre(genreId) {
-  const data = await fetchData(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`);
-  return data.results;
+async function fetchTrendingAnime() {
+  let allResults = [];
+  for (let page = 1; page <= 3; page++) {
+    const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
+    const data = await res.json();
+    const filtered = data.results.filter(item =>
+      item.original_language === 'ja' && item.genre_ids.includes(16)
+    );
+    allResults = allResults.concat(filtered);
+  }
+  return allResults;
 }
 
-async function fetchAnime() {
-  const data = await fetchData(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_genres=16&with_original_language=ja`);
-  return data.results;
-}
-
-// ================== DISPLAY FUNCTIONS ==================
+// ================== Banner ==================
 function displayBanner(item) {
   const banner = document.getElementById('banner');
-  const title = document.getElementById('banner-title');
+  banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
+  document.getElementById('banner-title').textContent = item.title || item.name;
+  document.getElementById('banner-overview').textContent = item.overview || "";
 
-  if (item && item.backdrop_path) {
-    banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
-    title.textContent = item.title || item.name;
-  }
+  // Banner buttons
+  document.getElementById('banner-play').onclick = () => showDetails(item);
+  document.getElementById('banner-list').onclick = () => toggleMyList(item);
 }
 
-function rotateBanner() {
-  if (bannerItems.length === 0) return;
-  displayBanner(bannerItems[bannerIndex]);
-  bannerIndex = (bannerIndex + 1) % bannerItems.length;
-}
-
+// ================== Movie/Show List ==================
 function displayList(items, containerId) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
@@ -53,36 +44,35 @@ function displayList(items, containerId) {
     const img = document.createElement('img');
     img.src = `${IMG_URL}${item.poster_path}`;
     img.alt = item.title || item.name;
-    img.loading = 'lazy';
+    img.classList.add("fade-in");
     img.onclick = () => showDetails(item);
     container.appendChild(img);
   });
 }
 
-// ================== MODAL ==================
-async function showDetails(item) {
+// ================== Modal ==================
+function showDetails(item) {
   currentItem = item;
-
   document.getElementById('modal-title').textContent = item.title || item.name;
-  document.getElementById('modal-description').textContent = item.overview || 'No description available.';
+  document.getElementById('modal-description').textContent = item.overview;
   document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-  document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
-
-  await changeServer();
+  document.getElementById('modal-rating').innerHTML =
+    '★'.repeat(Math.round(item.vote_average / 2));
+  changeServer();
+  updateListButton(item);
   document.getElementById('modal').style.display = 'flex';
 }
 
-async function changeServer() {
-  if (!currentItem) return;
+function changeServer() {
   const server = document.getElementById('server').value;
-  const type = currentItem.media_type === 'movie' ? 'movie' : 'tv';
-  let embedURL = '';
+  const type = currentItem.media_type === "movie" ? "movie" : "tv";
+  let embedURL = "";
 
-  if (server === 'vidsrc.cc') {
+  if (server === "vidsrc.cc") {
     embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-  } else if (server === 'vidsrc.me') {
+  } else if (server === "vidsrc.me") {
     embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
-  } else if (server === 'player.videasy.net') {
+  } else if (server === "player.videasy.net") {
     embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
   }
 
@@ -94,37 +84,7 @@ function closeModal() {
   document.getElementById('modal-video').src = '';
 }
 
-// ================== TRAILERS ==================
-async function watchTrailer() {
-  if (!currentItem) return;
-  const type = currentItem.media_type === 'movie' ? 'movie' : 'tv';
-  const data = await fetchData(`${BASE_URL}/${type}/${currentItem.id}/videos?api_key=${API_KEY}`);
-  const trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
-  if (trailer) {
-    window.open(`https://www.youtube.com/watch?v=${trailer.key}`, '_blank');
-  } else {
-    alert('Trailer not available.');
-  }
-}
-
-// ================== WATCHLIST ==================
-function toggleWatchlist() {
-  if (!currentItem) return;
-  let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-  const exists = watchlist.find(i => i.id === currentItem.id);
-
-  if (exists) {
-    watchlist = watchlist.filter(i => i.id !== currentItem.id);
-    alert('Removed from My List');
-  } else {
-    watchlist.push(currentItem);
-    alert('Added to My List');
-  }
-
-  localStorage.setItem('watchlist', JSON.stringify(watchlist));
-}
-
-// ================== SEARCH ==================
+// ================== Search ==================
 function openSearchModal() {
   document.getElementById('search-modal').style.display = 'flex';
   document.getElementById('search-input').focus();
@@ -137,12 +97,16 @@ function closeSearchModal() {
 
 async function searchTMDB() {
   const query = document.getElementById('search-input').value;
-  if (!query.trim()) return;
+  if (!query.trim()) {
+    document.getElementById('search-results').innerHTML = '';
+    return;
+  }
 
-  const data = await fetchData(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
+  const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
+  const data = await res.json();
+
   const container = document.getElementById('search-results');
   container.innerHTML = '';
-
   data.results.forEach(item => {
     if (!item.poster_path) return;
     const img = document.createElement('img');
@@ -156,60 +120,43 @@ async function searchTMDB() {
   });
 }
 
-// ================== THEME TOGGLE ==================
-function toggleTheme() {
-  document.body.classList.toggle('light-mode');
+// ================== My List ==================
+function toggleMyList(item) {
+  let myList = JSON.parse(localStorage.getItem("myList")) || [];
+  const exists = myList.some(i => i.id === item.id);
+
+  if (exists) {
+    myList = myList.filter(i => i.id !== item.id);
+    localStorage.setItem("myList", JSON.stringify(myList));
+    document.getElementById("add-to-list-btn").textContent = "+ Add to My List";
+  } else {
+    myList.push(item);
+    localStorage.setItem("myList", JSON.stringify(myList));
+    document.getElementById("add-to-list-btn").textContent = "✓ Added";
+  }
 }
 
-// ================== SIDEBAR ==================
-function toggleMenu() {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.style.width = sidebar.style.width === '250px' ? '0' : '250px';
+function updateListButton(item) {
+  const myList = JSON.parse(localStorage.getItem("myList")) || [];
+  const exists = myList.some(i => i.id === item.id);
+
+  document.getElementById("add-to-list-btn").textContent = exists
+    ? "✓ Added"
+    : "+ Add to My List";
+
+  document.getElementById("add-to-list-btn").onclick = () => toggleMyList(item);
 }
 
-// ================== KEYBOARD SHORTCUTS ==================
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeModal();
-    closeSearchModal();
-  }
-  if (e.key === 'ArrowRight') {
-    document.querySelectorAll('.list').forEach(list => list.scrollBy(200, 0));
-  }
-  if (e.key === 'ArrowLeft') {
-    document.querySelectorAll('.list').forEach(list => list.scrollBy(-200, 0));
-  }
-});
-
-// ================== INIT ==================
+// ================== Init ==================
 async function init() {
-  // Show loader
-  document.getElementById('loader').style.display = 'flex';
+  const movies = await fetchTrending('movie');
+  const tvShows = await fetchTrending('tv');
+  const anime = await fetchTrendingAnime();
 
-  const trending = await fetchTrending('movie');
-  const action = await fetchByGenre(28);
-  const comedy = await fetchByGenre(35);
-  const horror = await fetchByGenre(27);
-  const romance = await fetchByGenre(10749);
-  const scifi = await fetchByGenre(878);
-  const anime = await fetchAnime();
-
-  // Store for banner rotation
-  bannerItems = trending.slice(0, 5);
-  rotateBanner();
-  setInterval(rotateBanner, 10000);
-
-  // Display lists
-  displayList(trending, 'trending-list');
-  displayList(action, 'action-list');
-  displayList(comedy, 'comedy-list');
-  displayList(horror, 'horror-list');
-  displayList(romance, 'romance-list');
-  displayList(scifi, 'scifi-list');
+  displayBanner(movies[Math.floor(Math.random() * movies.length)]);
+  displayList(movies, 'movies-list');
+  displayList(tvShows, 'tvshows-list');
   displayList(anime, 'anime-list');
-
-  // Hide loader
-  document.getElementById('loader').style.display = 'none';
 }
 
 init();
