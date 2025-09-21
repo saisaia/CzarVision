@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CzarVision</title>
 
-  <!-- ✅ Corrected paths -->
+  <!-- CSS -->
   <link rel="stylesheet" href="css/home.css">
-  <link rel="preload" href="css/home.css" as="style">
-  <link rel="preload" href="js/home.js" as="script">
 
+  <!-- Manifest & Fonts -->
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- ✅ Corrected JS path -->
+  <!-- JS (defer ensures DOM is loaded) -->
   <script defer src="js/home.js"></script>
 </head>
 
 <body>
+  <!-- Navbar -->
   <div class="navbar">
     <img src="logo.png" alt="CzarVision Logo" />
     <div class="nav-links">
@@ -27,6 +27,7 @@
     </div>
   </div>
 
+  <!-- Banner -->
   <div class="banner" id="banner">
     <h1 id="banner-title"></h1>
   </div>
@@ -37,6 +38,7 @@
     <div class="list" id="mylist"></div>
   </div>
 
+  <!-- Trending Sections -->
   <div class="row">
     <h2>Trending Movies</h2>
     <div class="list" id="movies-list"></div>
@@ -64,7 +66,6 @@
           <p id="modal-description"></p>
         </div>
       </div>
-      
       <div class="server-selector">
         <label for="server">Change Server:</label>
         <select id="server" onchange="changeServer()">
@@ -95,5 +96,20 @@
       </div>
     </div>
   </footer>
+
+  <!-- Safe JS Initialization -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const banner = document.getElementById("banner");
+      if (banner) {
+        banner.onclick = displayBanner; // safe assignment
+      }
+
+      // Initialize other functions safely if needed
+      if (typeof init === "function") {
+        init();
+      }
+    });
+  </script>
 </body>
 </html>
