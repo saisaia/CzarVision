@@ -1,22 +1,23 @@
-/* ========= CONFIG ========= */
+/* ================= CONFIG ================= */
 const API_KEY = '610f63ddc0fd1c34901a203b7eea62cc';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
+
 let currentItem = null;
+let bannerItem = null;
 
-/* ========= UTIL ========= */
-const $ = (sel, ctx = document) => ctx.querySelector(sel);
-const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
-const safeText = (s) => s || '—';
+/* ================ HELPERS ================ */
+const $ = (s, ctx = document) => ctx.querySelector(s);
+const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
+const safe = (v, fallback = '—') => v || fallback;
 
-/* debounce */
 function debounce(fn, wait = 300) {
   let t;
-  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), wait); };
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
 }
 
-/* IntersectionObserver for lazy images */
-const io = new IntersectionObserver(entries => {
+/* IntersectionObserver for lazy loading posters */
+const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       const img = e.target;
@@ -26,82 +27,88 @@ const io = new IntersectionObserver(entries => {
   });
 }, { rootMargin: '200px' });
 
-/* ========= TMDB HELPERS ========= */
-async function tmdbFetch(path) {
-  const res = await fetch(`${BASE_URL}${path}&api_key=${API_KEY}`);
-  if (!res.ok) throw new Error('TMDB fetch failed');
+/* Safe TMDB fetch - pass path like '/trending/movie/week' and optional params */
+async function tmdbFetch(path, params = {}) {
+  const url = new URL(BASE_URL + path);
+  params.api_key = API_KEY;
+  url.search = new URLSearchParams(params).toString();
+  const res = await fetch(url.toString());
+  if (!res.ok) throw new Error(`TMDB error: ${res.status}`);
   return res.json();
 }
 
+/* =============== DATA LOADERS =============== */
 async function fetchTrending(type) {
-  const json = await tmdbFetch(`/trending/${type}/week?`);
+  const json = await tmdbFetch(`/trending/${type}/week`);
   return json.results || [];
 }
 
 async function fetchTrendingAnime() {
-  let allResults = [];
+  let results = [];
   for (let page = 1; page <= 3; page++) {
-    const json = await tmdbFetch(`/trending/tv/week?&page=${page}`);
+    const json = await tmdbFetch('/trending/tv/week', { page });
     const filtered = (json.results || []).filter(it => it.original_language === 'ja' && (it.genre_ids || []).includes(16));
-    allResults = allResults.concat(filtered);
+    results = results.concat(filtered);
   }
-  return allResults;
+  return results;
 }
 
-/* ========= RENDER ========= */
+/* =============== RENDERERS =============== */
 function setBanner(item) {
+  bannerItem = item;
   const banner = $('#banner');
   if (!item || !item.backdrop_path) {
-    banner.style.background = `linear-gradient(180deg,#0b0b0b,#070707)`;
+    banner.style.backgroundImage = '';
     $('#banner-title').textContent = 'CzarVision';
     $('#banner-year').textContent = '';
     $('#banner-rating').textContent = '';
     return;
   }
   banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
-  $('#banner-title').textContent = item.title || item.name;
+  $('#banner-title').textContent = item.title || item.name || 'Featured';
   $('#banner-year').textContent = (item.release_date || item.first_air_date || '').slice(0,4);
   $('#banner-rating').textContent = item.vote_average ? `★ ${item.vote_average.toFixed(1)}` : '';
 }
 
+/* create card element */
 function makeCard(item) {
-  const div = document.createElement('div');
-  div.className = 'card';
+  const wrap = document.createElement('div');
+  wrap.className = 'card';
   const img = document.createElement('img');
-  img.alt = safeText(item.title || item.name);
+  img.alt = safe(item.title || item.name, 'Poster');
   if (item.poster_path) img.dataset.src = IMG_URL + item.poster_path;
-  else img.src = 'placeholder.png'; // optional fallback if you have one
+  else img.src = '';
   img.loading = 'lazy';
   img.addEventListener('click', () => showDetails(item));
-  div.appendChild(img);
+  wrap.appendChild(img);
+
   const t = document.createElement('div');
   t.className = 'title';
   t.textContent = item.title || item.name || 'Untitled';
-  div.appendChild(t);
+  wrap.appendChild(t);
 
-  // start observing for lazy load
   if (img.dataset.src) io.observe(img);
-  return div;
+  return wrap;
 }
 
 function renderList(items, containerId) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = '';
+  const c = $(`#${containerId}`);
+  c.innerHTML = '';
   if (!items || items.length === 0) {
-    container.innerHTML = `<div style="color:var(--muted);padding:12px">No results</div>`;
+    c.innerHTML = `<div style="color:var(--muted);padding:12px">No results</div>`;
     return;
   }
-  items.forEach(it => container.appendChild(makeCard(it)));
+  items.forEach(it => c.appendChild(makeCard(it)));
 }
 
-/* ========= MODAL / PLAYER ========= */
+/* =============== MODAL / PLAYER =============== */
 function showDetails(item) {
   currentItem = item;
   $('#modal-title').textContent = item.title || item.name || 'Untitled';
   $('#modal-description').textContent = item.overview || 'No description available.';
   $('#modal-image').src = item.poster_path ? `${IMG_URL}${item.poster_path}` : '';
   $('#modal-rating').textContent = item.vote_average ? '★'.repeat(Math.round(item.vote_average / 2)) : '';
-  changeServer(); // set iframe for default server
+  changeServer(); // set iframe by default server
   $('#modal').classList.add('show');
   $('#modal').setAttribute('aria-hidden', 'false');
 }
@@ -112,10 +119,17 @@ function closeModal() {
   $('#modal-video').src = '';
 }
 
+/* pick type: prefer explicit media_type else fallback from fields */
+function getMediaType(item) {
+  if (!item) return 'movie';
+  if (item.media_type) return item.media_type;
+  return item.release_date ? 'movie' : 'tv';
+}
+
 function changeServer() {
   if (!currentItem) return;
   const server = $('#server').value;
-  const type = currentItem.media_type === 'movie' ? 'movie' : 'tv';
+  const type = getMediaType(currentItem);
   let embed = '';
   if (server === 'vidsrc.cc') embed = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
   else if (server === 'vidsrc.me') embed = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
@@ -123,36 +137,92 @@ function changeServer() {
   $('#modal-video').src = embed;
 }
 
-/* ========= SEARCH ========= */
+/* =============== SEARCH =============== */
 async function searchTMDB() {
   const q = $('#search-input').value.trim();
   const results = $('#search-results');
   results.innerHTML = '';
   if (!q) return;
-  // skeleton
+  // show skeletons
   results.innerHTML = Array.from({length:8}).map(()=>`<div class="result" style="height:160px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.04),rgba(255,255,255,0.02));"></div>`).join('');
   try {
-    const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(q)}`);
-    const data = await res.json();
-    const arr = (data.results || []).filter(r => r.poster_path).slice(0,24);
+    const json = await tmdbFetch('/search/multi', { query: q, page: 1 });
+    const arr = (json.results || []).filter(r => r.poster_path).slice(0,24);
     results.innerHTML = '';
+    if (arr.length === 0) {
+      results.innerHTML = `<div style="padding:12px;color:var(--muted)">No matches</div>`;
+      return;
+    }
     arr.forEach(it => {
-      const el = document.createElement('div'); el.className = 'result';
+      const el = document.createElement('div');
+      el.className = 'result';
       const img = document.createElement('img');
       img.src = `${IMG_URL}${it.poster_path}`;
       img.alt = it.title || it.name;
-      img.addEventListener('click', () => { closeSearchModal(); showDetails(it); });
+      img.addEventListener('click', () => {
+        closeSearchModal();
+        showDetails(it);
+      });
       el.appendChild(img);
       results.appendChild(el);
     });
-    if (arr.length === 0) results.innerHTML = `<div style="padding:12px;color:var(--muted)">No matches</div>`;
   } catch (err) {
-    results.innerHTML = `<div style="padding:12px;color:var(--muted)">Search failed</div>`;
     console.error(err);
+    results.innerHTML = `<div style="padding:12px;color:var(--muted)">Search failed</div>`;
   }
 }
 const debouncedSearch = debounce(searchTMDB, 320);
 
+/* =============== INIT =============== */
+async function init() {
+  try {
+    const [movies, tv, anime] = await Promise.all([
+      fetchTrending('movie'),
+      fetchTrending('tv'),
+      fetchTrendingAnime()
+    ]);
+    if (movies && movies.length) setBanner(movies[Math.floor(Math.random()*movies.length)]);
+    renderList(movies.slice(0,24), 'movies-list');
+    renderList(tv.slice(0,24), 'tvshows-list');
+    renderList(anime.slice(0,24), 'anime-list');
+  } catch (err) {
+    console.error('Init failed', err);
+  }
+}
+
+/* =============== EVENTS =============== */
+document.addEventListener('DOMContentLoaded', () => {
+  // buttons
+  $('#search-open').addEventListener('click', openSearchModal);
+  $('#search-close').addEventListener('click', closeSearchModal);
+  $('#modal-close').addEventListener('click', closeModal);
+
+  // modal background click
+  $('#modal').addEventListener('click', (ev) => { if (ev.target === $('#modal')) closeModal(); });
+  $('#search-modal').addEventListener('click', (ev) => { if (ev.target === $('#search-modal')) closeSearchModal(); });
+
+  // search input
+  $('#search-input').addEventListener('input', debouncedSearch);
+
+  // server change
+  $('#server').addEventListener('change', changeServer);
+
+  // keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/') { e.preventDefault(); openSearchModal(); }
+    if (e.key === 'Escape') { closeModal(); closeSearchModal(); }
+  });
+
+  // banner play button opens details for banner item
+  $('#banner-play').addEventListener('click', () => {
+    if (bannerItem) showDetails(bannerItem);
+  });
+
+  // start
+  init();
+});
+
+/* =============== UI helpers =============== */
 function openSearchModal() {
   $('#search-modal').classList.add('show');
   $('#search-modal').setAttribute('aria-hidden','false');
@@ -164,51 +234,3 @@ function closeSearchModal() {
   $('#search-results').innerHTML = '';
   $('#search-input').value = '';
 }
-
-/* ========= INIT ========= */
-async function init() {
-  try {
-    const [movies, tv, anime] = await Promise.all([
-      fetchTrending('movie'),
-      fetchTrending('tv'),
-      fetchTrendingAnime()
-    ]);
-    if (movies && movies.length) setBanner(movies[Math.floor(Math.random() * movies.length)]);
-    renderList(movies.slice(0,24), 'movies-list');
-    renderList(tv.slice(0,24), 'tvshows-list');
-    renderList(anime.slice(0,24), 'anime-list');
-  } catch (err) {
-    console.error('Init failed', err);
-  }
-}
-
-/* ========= EVENTS ========= */
-document.addEventListener('keydown', e => {
-  if (e.key === '/') { e.preventDefault(); openSearchModal(); }
-  if (e.key === 'Escape') { closeModal(); closeSearchModal(); }
-});
-
-$('#search-open').addEventListener('click', openSearchModal);
-$('#search-close').addEventListener('click', closeSearchModal);
-$('#modal-close').addEventListener('click', closeModal);
-$('#search-input').addEventListener('input', debouncedSearch);
-$('#server').addEventListener('change', changeServer);
-
-// click outside modal content closes it
-$('#modal').addEventListener('click', (ev) => {
-  if (ev.target === $('#modal')) closeModal();
-});
-$('#search-modal').addEventListener('click', (ev) => {
-  if (ev.target === $('#search-modal')) closeSearchModal();
-});
-
-// Banner CTA - open top modal item if available
-$('#banner-play').addEventListener('click', () => {
-  // attempt to open details of currently shown banner item by reading title match
-  const title = $('#banner-title').textContent;
-  const lists = [...$$('.card')];
-  const match = lists.find(c => c.querySelector('.title') && c.querySelector('.title').textContent.trim() === title.trim());
-  if (match) match.click();
-});
-
-init();
