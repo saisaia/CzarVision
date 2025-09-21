@@ -12,7 +12,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- JS (defer ensures DOM is loaded) -->
+  <!-- JS -->
   <script defer src="js/home.js"></script>
 </head>
 
@@ -30,6 +30,11 @@
   <!-- Banner -->
   <div class="banner" id="banner">
     <h1 id="banner-title"></h1>
+    <p id="banner-overview"></p>
+    <div class="banner-buttons">
+      <button id="banner-play">Play</button>
+      <button id="banner-list">+ My List</button>
+    </div>
   </div>
 
   <!-- My List Row (auto-hide if empty) -->
@@ -64,6 +69,7 @@
           <h2 id="modal-title"></h2>
           <div class="stars" id="modal-rating"></div>
           <p id="modal-description"></p>
+          <button id="add-to-list-btn">+ Add to My List</button>
         </div>
       </div>
       <div class="server-selector">
@@ -96,20 +102,5 @@
       </div>
     </div>
   </footer>
-
-  <!-- Safe JS Initialization -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const banner = document.getElementById("banner");
-      if (banner) {
-        banner.onclick = displayBanner; // safe assignment
-      }
-
-      // Initialize other functions safely if needed
-      if (typeof init === "function") {
-        init();
-      }
-    });
-  </script>
 </body>
 </html>
