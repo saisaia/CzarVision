@@ -1,88 +1,134 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Czarvision - Movies & Series</title>
-  <link rel="stylesheet" href="home.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CzarVision</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preload critical CSS & JS -->
+  <link rel="preload" href="css/home.css" as="style">
+  <link rel="stylesheet" href="css/home.css">
+
+  <link rel="preload" href="js/home.js" as="script">
+  <script defer src="js/home.js"></script>
+
+  <!-- favicon -->
+  <link rel="icon" href="logo.png">
+  <meta name="theme-color" content="#111111" />
 </head>
 <body>
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo-container">
-      <img src="czarvision-logo.png" alt="Czarvision Logo" class="logo">
-      <span class="brand">CZARVISION</span>
+  <!-- NAVBAR -->
+  <header class="navbar" role="banner">
+    <a class="brand" href="index.html">
+      <img src="logo.png" class="logo" alt="CzarVision logo" />
+      <span class="brand-text">CzarVision</span>
+    </a>
+
+    <div class="nav-actions">
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="#" id="movies-link">Movies</a>
+        <a href="#" id="tv-link">TV</a>
+      </nav>
+
+      <div class="search-wrapper" title="Search (press /)">
+        <input id="top-search" class="search-input" type="search" placeholder="Search..." aria-label="Search" />
+        <button id="open-search" class="icon-btn" aria-label="Open search">🔍</button>
+      </div>
     </div>
-    <nav class="nav-links">
-      <a href="#">Home</a>
-      <a href="#">Movies</a>
-      <a href="#">Series</a>
-      <a href="#">About</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()">
-    </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Welcome to Czarvision</h1>
-      <p>Your gateway to movies, series, and entertainment.</p>
-      <a href="#" class="btn">Explore Now</a>
-    </div>
-  </section>
-
-  <!-- Featured Movies -->
-  <section class="featured">
-    <h2>Featured Movies</h2>
-    <div class="movie-grid">
-      <div class="movie-card" onclick="openModal('sample1.jpg','Sample 1','An epic action-packed movie.')">
-        <img src="sample1.jpg" alt="Sample 1" loading="lazy">
-        <h3>Sample 1</h3>
-      </div>
-      <div class="movie-card" onclick="openModal('sample2.jpg','Sample 2','A heartwarming drama film.')">
-        <img src="sample2.jpg" alt="Sample 2" loading="lazy">
-        <h3>Sample 2</h3>
-      </div>
-      <div class="movie-card" onclick="openModal('sample3.jpg','Sample 3','A futuristic sci-fi adventure.')">
-        <img src="sample3.jpg" alt="Sample 3" loading="lazy">
-        <h3>Sample 3</h3>
-      </div>
-    </div>
-  </section>
-
-  <!-- Movie Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <div class="modal-body">
-        <img id="modal-img" src="" alt="">
-        <div class="modal-text">
-          <h2 id="modal-title"></h2>
-          <p id="modal-desc"></p>
+  <!-- BANNER -->
+  <main id="main">
+    <section id="banner" class="banner" role="region" aria-label="Featured">
+      <div class="banner-inner">
+        <h1 id="banner-title">Loading...</h1>
+        <p id="banner-overview" class="muted"></p>
+        <div class="banner-cta">
+          <button id="banner-play" class="btn primary"><i class="fa-play">▶</i> Play</button>
+          <button id="banner-info" class="btn light">More info</button>
         </div>
       </div>
+      <div class="banner-dim"></div>
+    </section>
+
+    <!-- CAROUSELS / ROWS -->
+    <section class="container">
+      <div class="row">
+        <h2>Trending Movies</h2>
+        <div id="movies-list" class="list" aria-live="polite"></div>
+      </div>
+
+      <div class="row">
+        <h2>Trending TV Shows</h2>
+        <div id="tvshows-list" class="list"></div>
+      </div>
+
+      <div class="row">
+        <h2>Trending Anime</h2>
+        <div id="anime-list" class="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- DETAILS MODAL -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button id="modal-close" class="modal-close" aria-label="Close">✕</button>
+
+      <div class="modal-body">
+        <img id="modal-image" alt="poster" />
+        <div class="modal-text">
+          <h3 id="modal-title">Title</h3>
+          <div id="modal-rating" class="stars"></div>
+          <p id="modal-description" class="muted"></p>
+
+          <div class="server-row">
+            <label for="server">Server</label>
+            <select id="server" onchange="changeServer()">
+              <option value="vidsrc.cc">vidsrc.cc</option>
+              <option value="vidsrc.me">vidsrc.me</option>
+              <option value="player.videasy.net">player.videasy.net</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="player-wrap">
+        <iframe id="modal-video" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 
-  <!-- Search Modal -->
-  <div class="search-modal" id="search-modal">
-    <div class="search-box">
-      <span class="close" onclick="closeSearchModal()">&times;</span>
-      <input type="text" placeholder="Type to search...">
-      <div class="results"></div>
+  <!-- SEARCH MODAL -->
+  <div id="search-modal" class="search-modal" aria-hidden="true">
+    <div class="search-panel">
+      <button id="search-close" class="search-close" aria-label="Close search">✕</button>
+      <input id="search-input" class="search-query" placeholder="Search movies, TV, anime..." aria-label="Search input" />
+      <div id="search-results" class="search-results" aria-live="polite"></div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <p>&copy; 2025 Czarvision. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms</a>
-      <a href="#">Contact</a>
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <div>© 2025 CzarVision — curated with ❤️</div>
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+      </div>
     </div>
   </footer>
 
-  <script src="home.js"></script>
+  <!-- Register service worker (PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').catch(()=>{/*sw failed*/});
+    }
+  </script>
 </body>
 </html>
