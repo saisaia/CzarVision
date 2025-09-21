@@ -1,55 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CzarVision - Movie Hub</title>
-  <link rel="stylesheet" href="home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CzarVision</title>
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="preload" href="css/home.css" as="style">
+  <link rel="preload" href="js/home.js" as="script">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script defer src="js/home.js"></script>
 </head>
+
 <body>
   <!-- Navbar -->
   <div class="navbar">
-    <img src="czarvision-logo-light.png" alt="CzarVision Logo" class="logo">
+    <img src="logo.png" alt="CzarVision Logo" class="logo"/>
     <div class="nav-links">
       <a href="index.html">Home</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()">
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <header class="hero">
-    <h1>Welcome to CzarVision</h1>
-    <p>Your ultimate hub for movies, reviews, and more.</p>
-    <button class="cta" onclick="openSearchModal()">Search Movies</button>
+  <!-- Banner -->
+  <header class="banner" id="banner">
+    <div class="banner-content">
+      <h1 id="banner-title"></h1>
+      <p id="banner-overview"></p>
+      <div class="banner-buttons">
+        <button class="btn play"><i class="fa fa-play"></i> Play</button>
+        <button class="btn info"><i class="fa fa-info-circle"></i> More Info</button>
+      </div>
+    </div>
+    <div class="banner-fade"></div>
   </header>
 
-  <!-- Movie Grid -->
-  <main class="movie-grid">
-    <div class="movie-card">
-      <img src="https://via.placeholder.com/300x450" alt="Movie 1">
-      <h3>Sample Movie 1</h3>
-    </div>
-    <div class="movie-card">
-      <img src="https://via.placeholder.com/300x450" alt="Movie 2">
-      <h3>Sample Movie 2</h3>
-    </div>
-    <div class="movie-card">
-      <img src="https://via.placeholder.com/300x450" alt="Movie 3">
-      <h3>Sample Movie 3</h3>
-    </div>
-  </main>
+  <!-- Rows -->
+  <section class="row">
+    <h2>Trending Movies</h2>
+    <div class="list" id="movies-list"></div>
+  </section>
 
-  <!-- Search Modal -->
-  <div id="searchModal" class="modal">
+  <section class="row">
+    <h2>Trending TV Shows</h2>
+    <div class="list" id="tvshows-list"></div>
+  </section>
+
+  <section class="row">
+    <h2>Trending Anime</h2>
+    <div class="list" id="anime-list"></div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeSearchModal()">&times;</span>
-      <h2>Search Movies</h2>
-      <input type="text" id="modalSearchInput" placeholder="Type a movie title...">
-      <button onclick="performSearch()">Search</button>
-      <div id="searchResults"></div>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="modal-body">
+        <img id="modal-image" src="" alt="" />
+        <div class="modal-text">
+          <h2 id="modal-title"></h2>
+          <div class="stars" id="modal-rating"></div>
+          <p id="modal-description"></p>
+        </div>
+      </div>
+      <div class="server-selector">
+        <label for="server">Change Server:</label>
+        <select id="server" onchange="changeServer()">
+          <option value="vidsrc.cc">Vidsrc.cc</option>
+          <option value="vidsrc.me">Vidsrc.me</option>
+          <option value="player.videasy.net">Player.Videasy.net</option>
+        </select>
+      </div>
+      <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
 
-  <script src="home.js"></script>
+  <!-- Search Modal -->
+  <div class="search-modal" id="search-modal">
+    <span class="close" onclick="closeSearchModal()">&times;</span>
+    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
+    <div class="results" id="search-results"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 CzarVision. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Disclaimer</a>
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
