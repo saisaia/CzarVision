@@ -1,52 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CzarVision</title>
-  <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
   <!-- Navbar -->
-  <header class="navbar">
+  <div class="navbar">
     <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo" />
-    <nav class="nav-links">
+    <div class="nav-links">
       <a href="index.html" class="active">Home</a>
       <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
-    </nav>
-  </header>
+    </div>
+  </div>
 
   <!-- Banner -->
-  <section class="banner" id="banner">
-    <div class="banner-overlay">
-      <h1 id="banner-title"></h1>
-    </div>
-  </section>
+  <div class="banner" id="banner">
+    <h1 id="banner-title"></h1>
+  </div>
 
-  <!-- Rows -->
-  <main>
-    <section class="row">
-      <h2>Trending Movies</h2>
-      <div class="list" id="movies-list"></div>
-    </section>
+  <!-- Movie Rows -->
+  <div class="row">
+    <h2>Trending Movies</h2>
+    <div class="list" id="movies-list"></div>
+  </div>
 
-    <section class="row">
-      <h2>Trending TV Shows</h2>
-      <div class="list" id="tvshows-list"></div>
-    </section>
+  <div class="row">
+    <h2>Trending TV Shows</h2>
+    <div class="list" id="tvshows-list"></div>
+  </div>
 
-    <section class="row">
-      <h2>Trending Anime</h2>
-      <div class="list" id="anime-list"></div>
-    </section>
-  </main>
+  <div class="row">
+    <h2>Trending Anime</h2>
+    <div class="list" id="anime-list"></div>
+  </div>
 
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <div class="modal-body">
-        <img id="modal-image" src="" alt="Poster" />
+        <img id="modal-image" src="" alt="Poster">
         <div class="modal-text">
           <h2 id="modal-title"></h2>
           <p id="modal-description"></p>
@@ -73,7 +69,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="footer">
+  <div class="footer">
     <div class="footer-content">
       <p>© 2025 CzarVision. All rights reserved.</p>
       <div class="footer-links">
@@ -82,7 +78,7 @@
         <a href="#">Privacy</a>
       </div>
     </div>
-  </footer>
+  </div>
 
   <script src="home.js"></script>
 </body>
