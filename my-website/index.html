@@ -7,78 +7,61 @@
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <!-- Navbar -->
+
+  <!-- ================== NAVBAR ================== -->
   <div class="navbar">
-    <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo" />
+    <div class="logo-wrapper">
+      <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo">
+    </div>
     <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+      <a href="index.html">Home</a>
+      <a href="#">Movies</a>
+      <a href="#">Series</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <input 
+        type="text" 
+        class="search-bar" 
+        placeholder="Search..." 
+        onfocus="openSearchModal()" 
+      />
     </div>
   </div>
+  <!-- =============== END NAVBAR ================= -->
 
-  <!-- Banner -->
-  <div class="banner" id="banner">
-    <h1 id="banner-title"></h1>
-  </div>
+  <!-- ================== MAIN CONTENT (PLACEHOLDER) ================== -->
+  <main>
+    <section class="hero">
+      <h1>Welcome to CzarVision</h1>
+      <p>Your ultimate destination for movies & series.</p>
+    </section>
 
-  <!-- Movie Rows -->
-  <div class="row">
-    <h2>Trending Movies</h2>
-    <div class="list" id="movies-list"></div>
-  </div>
+    <section class="content">
+      <div class="card">
+        <h2>Featured Movie</h2>
+        <p>Discover the latest blockbuster and timeless classics.</p>
+      </div>
+      <div class="card">
+        <h2>Top Series</h2>
+        <p>Stream trending series with high-quality experience.</p>
+      </div>
+    </section>
+  </main>
+  <!-- ================= END MAIN CONTENT ================== -->
 
-  <div class="row">
-    <h2>Trending TV Shows</h2>
-    <div class="list" id="tvshows-list"></div>
-  </div>
-
-  <div class="row">
-    <h2>Trending Anime</h2>
-    <div class="list" id="anime-list"></div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal" id="modal">
+  <!-- ================== SEARCH MODAL ================== -->
+  <div id="searchModal" class="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <div class="modal-body">
-        <img id="modal-image" src="" alt="Poster">
-        <div class="modal-text">
-          <h2 id="modal-title"></h2>
-          <p id="modal-description"></p>
-          <div class="stars" id="modal-rating"></div>
-          <div class="server-selector">
-            <label for="server">Choose Server:</label>
-            <select id="server" onchange="changeServer()">
-              <option value="vidsrc.cc">Vidsrc.cc</option>
-              <option value="vidsrc.me">Vidsrc.me</option>
-              <option value="player.videasy.net">Videasy</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <iframe id="modal-video" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
+      <span class="close" onclick="closeSearchModal()">&times;</span>
+      <input 
+        type="text" 
+        placeholder="Type to search..." 
+        class="modal-search-input" 
+        autofocus
+      >
     </div>
   </div>
-
-  <!-- Search Modal -->
-  <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()">&times;</span>
-    <input type="text" id="search-input" placeholder="Search movies, shows..." oninput="debouncedSearch()" />
-    <div class="results" id="search-results"></div>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <div class="footer-content">
-      <p>© 2025 CzarVision. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-        <a href="#">Privacy</a>
-      </div>
-    </div>
-  </div>
+  <!-- =============== END SEARCH MODAL ================== -->
 
   <script src="home.js"></script>
 </body>
