@@ -1,85 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CzarVision - Movies & TV</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CzarVision — Movies & TV</title>
+  <link rel="icon" href="czarvision-logo.png" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Navbar -->
-  <div class="navbar">
-    <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo" />
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+  <header class="navbar" role="banner">
+    <a class="brand" href="index.html">
+      <img src="czarvision-logo.png" alt="CzarVision logo" class="logo" />
+      <span class="brand-name">CzarVision</span>
+    </a>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="search-open" aria-label="Open search (press /)">&#128269;</button>
     </div>
-  </div>
+  </header>
 
-  <!-- Banner -->
-  <div id="banner" class="banner">
-    <h1 id="banner-title">Loading...</h1>
-  </div>
+  <main>
+    <section id="banner" class="banner" aria-label="Featured">
+      <div class="banner-inner">
+        <h1 id="banner-title">Loading...</h1>
+        <div class="banner-meta">
+          <span id="banner-year"></span>
+          <span id="banner-rating"></span>
+        </div>
+        <div class="banner-cta">
+          <button class="cta" id="banner-play">Watch Trailer</button>
+        </div>
+      </div>
+    </section>
 
-  <!-- Rows -->
-  <div class="row">
-    <h2>Trending Movies</h2>
-    <div class="list" id="movies-list"></div>
-  </div>
+    <section class="container">
+      <div class="row">
+        <h2>Trending Movies</h2>
+        <div id="movies-list" class="list" aria-live="polite"></div>
+      </div>
 
-  <div class="row">
-    <h2>Trending TV Shows</h2>
-    <div class="list" id="tvshows-list"></div>
-  </div>
+      <div class="row">
+        <h2>Trending TV Shows</h2>
+        <div id="tvshows-list" class="list"></div>
+      </div>
 
-  <div class="row">
-    <h2>Trending Anime</h2>
-    <div class="list" id="anime-list"></div>
-  </div>
+      <div class="row">
+        <h2>Trending Anime</h2>
+        <div id="anime-list" class="list"></div>
+      </div>
+    </section>
+  </main>
 
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+  <!-- Details Modal -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-label="Details dialog">
+    <div class="modal-content" role="document">
+      <button class="close-btn" id="modal-close" aria-label="Close dialog">✕</button>
       <div class="modal-body">
-        <img id="modal-image" src="" alt="">
+        <img id="modal-image" src="" alt="Poster" />
         <div class="modal-text">
-          <h2 id="modal-title"></h2>
-          <p id="modal-description"></p>
-          <p class="stars" id="modal-rating"></p>
-          <div class="server-selector">
-            <label for="server">Choose Server:</label>
-            <select id="server" onchange="changeServer()">
-              <option value="vidsrc.cc">Vidsrc.cc</option>
-              <option value="vidsrc.me">Vidsrc.me</option>
-              <option value="player.videasy.net">Videasy</option>
+          <h3 id="modal-title">Title</h3>
+          <p id="modal-description" class="muted">Description</p>
+          <div class="meta-line">
+            <span id="modal-rating" class="stars"></span>
+            <select id="server" class="server-select" aria-label="Choose server">
+              <option value="vidsrc.cc">vidsrc.cc</option>
+              <option value="vidsrc.me">vidsrc.me</option>
+              <option value="player.videasy.net">videasy</option>
             </select>
           </div>
         </div>
       </div>
-      <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
+
+      <div class="player-wrap">
+        <iframe id="modal-video" title="Player" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 
   <!-- Search Modal -->
-  <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()">&times;</span>
-    <input type="text" id="search-input" placeholder="Type to search..." oninput="searchTMDB()">
-    <div class="results" id="search-results"></div>
+  <div id="search-modal" class="search-modal" aria-hidden="true">
+    <div class="search-panel" role="search">
+      <button class="close-search" id="search-close" aria-label="Close search">✕</button>
+      <input id="search-input" class="search-input" placeholder="Search movies, TV, anime..." aria-label="Search" />
+      <div id="search-results" class="search-results" aria-live="polite"></div>
+    </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="footer-content">
-      <p>&copy; 2025 CzarVision. All rights reserved.</p>
+      <div>© CzarVision — curated with ❤️</div>
       <div class="footer-links">
         <a href="#">About</a>
         <a href="#">Contact</a>
-        <a href="#">Privacy Policy</a>
+        <a href="#">Privacy</a>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
