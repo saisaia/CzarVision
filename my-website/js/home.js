@@ -26,18 +26,27 @@ async function fetchTrendingAnime() {
 // ================== Banner ==================
 function displayBanner(item) {
   const banner = document.getElementById('banner');
-  banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
-  document.getElementById('banner-title').textContent = item.title || item.name;
-  document.getElementById('banner-overview').textContent = item.overview || "";
+  if (!banner) return;
 
-  // Banner buttons
-  document.getElementById('banner-play').onclick = () => showDetails(item);
-  document.getElementById('banner-list').onclick = () => toggleMyList(item);
+  banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
+
+  const titleEl = document.getElementById('banner-title');
+  if (titleEl) titleEl.textContent = item.title || item.name;
+
+  const overviewEl = document.getElementById('banner-overview');
+  if (overviewEl) overviewEl.textContent = item.overview || "";
+
+  const playBtn = document.getElementById('banner-play');
+  if (playBtn) playBtn.onclick = () => showDetails(item);
+
+  const listBtn = document.getElementById('banner-list');
+  if (listBtn) listBtn.onclick = () => toggleMyList(item);
 }
 
 // ================== Movie/Show List ==================
 function displayList(items, containerId) {
   const container = document.getElementById(containerId);
+  if (!container) return;
   container.innerHTML = '';
   items.forEach(item => {
     if (!item.poster_path) return;
@@ -53,18 +62,28 @@ function displayList(items, containerId) {
 // ================== Modal ==================
 function showDetails(item) {
   currentItem = item;
-  document.getElementById('modal-title').textContent = item.title || item.name;
-  document.getElementById('modal-description').textContent = item.overview;
-  document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-  document.getElementById('modal-rating').innerHTML =
-    '★'.repeat(Math.round(item.vote_average / 2));
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) modalTitle.textContent = item.title || item.name;
+
+  const modalDesc = document.getElementById('modal-description');
+  if (modalDesc) modalDesc.textContent = item.overview;
+
+  const modalImg = document.getElementById('modal-image');
+  if (modalImg) modalImg.src = `${IMG_URL}${item.poster_path}`;
+
+  const modalRating = document.getElementById('modal-rating');
+  if (modalRating) modalRating.innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
+
   changeServer();
   updateListButton(item);
-  document.getElementById('modal').style.display = 'flex';
+
+  const modal = document.getElementById('modal');
+  if (modal) modal.style.display = 'flex';
 }
 
 function changeServer() {
-  const server = document.getElementById('server').value;
+  if (!currentItem) return;
+  const server = document.getElementById('server')?.value;
   const type = currentItem.media_type === "movie" ? "movie" : "tv";
   let embedURL = "";
 
@@ -76,29 +95,40 @@ function changeServer() {
     embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
   }
 
-  document.getElementById('modal-video').src = embedURL;
+  const iframe = document.getElementById('modal-video');
+  if (iframe) iframe.src = embedURL;
 }
 
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-  document.getElementById('modal-video').src = '';
+  const modal = document.getElementById('modal');
+  if (modal) modal.style.display = 'none';
+
+  const iframe = document.getElementById('modal-video');
+  if (iframe) iframe.src = '';
 }
 
 // ================== Search ==================
 function openSearchModal() {
-  document.getElementById('search-modal').style.display = 'flex';
-  document.getElementById('search-input').focus();
+  const searchModal = document.getElementById('search-modal');
+  if (searchModal) {
+    searchModal.style.display = 'flex';
+    document.getElementById('search-input')?.focus();
+  }
 }
 
 function closeSearchModal() {
-  document.getElementById('search-modal').style.display = 'none';
-  document.getElementById('search-results').innerHTML = '';
+  const searchModal = document.getElementById('search-modal');
+  if (searchModal) searchModal.style.display = 'none';
+
+  const results = document.getElementById('search-results');
+  if (results) results.innerHTML = '';
 }
 
 async function searchTMDB() {
-  const query = document.getElementById('search-input').value;
-  if (!query.trim()) {
-    document.getElementById('search-results').innerHTML = '';
+  const query = document.getElementById('search-input')?.value;
+  if (!query || !query.trim()) {
+    const results = document.getElementById('search-results');
+    if (results) results.innerHTML = '';
     return;
   }
 
@@ -106,6 +136,7 @@ async function searchTMDB() {
   const data = await res.json();
 
   const container = document.getElementById('search-results');
+  if (!container) return;
   container.innerHTML = '';
   data.results.forEach(item => {
     if (!item.poster_path) return;
@@ -125,14 +156,16 @@ function toggleMyList(item) {
   let myList = JSON.parse(localStorage.getItem("myList")) || [];
   const exists = myList.some(i => i.id === item.id);
 
+  const btn = document.getElementById("add-to-list-btn");
+
   if (exists) {
     myList = myList.filter(i => i.id !== item.id);
     localStorage.setItem("myList", JSON.stringify(myList));
-    document.getElementById("add-to-list-btn").textContent = "+ Add to My List";
+    if (btn) btn.textContent = "+ Add to My List";
   } else {
     myList.push(item);
     localStorage.setItem("myList", JSON.stringify(myList));
-    document.getElementById("add-to-list-btn").textContent = "✓ Added";
+    if (btn) btn.textContent = "✓ Added";
   }
 }
 
@@ -140,23 +173,28 @@ function updateListButton(item) {
   const myList = JSON.parse(localStorage.getItem("myList")) || [];
   const exists = myList.some(i => i.id === item.id);
 
-  document.getElementById("add-to-list-btn").textContent = exists
-    ? "✓ Added"
-    : "+ Add to My List";
+  const btn = document.getElementById("add-to-list-btn");
+  if (!btn) return;
 
-  document.getElementById("add-to-list-btn").onclick = () => toggleMyList(item);
+  btn.textContent = exists ? "✓ Added" : "+ Add to My List";
+  btn.onclick = () => toggleMyList(item);
 }
 
 // ================== Init ==================
 async function init() {
-  const movies = await fetchTrending('movie');
-  const tvShows = await fetchTrending('tv');
-  const anime = await fetchTrendingAnime();
+  try {
+    const movies = await fetchTrending('movie');
+    const tvShows = await fetchTrending('tv');
+    const anime = await fetchTrendingAnime();
 
-  displayBanner(movies[Math.floor(Math.random() * movies.length)]);
-  displayList(movies, 'movies-list');
-  displayList(tvShows, 'tvshows-list');
-  displayList(anime, 'anime-list');
+    if (movies.length > 0) displayBanner(movies[Math.floor(Math.random() * movies.length)]);
+    displayList(movies, 'movies-list');
+    displayList(tvShows, 'tvshows-list');
+    displayList(anime, 'anime-list');
+  } catch (err) {
+    console.error("Error initializing content:", err);
+  }
 }
 
-init();
+// Start
+document.addEventListener("DOMContentLoaded", init);
