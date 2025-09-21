@@ -4,110 +4,67 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CzarVision</title>
-<link rel="stylesheet" href="css/home.css">
-<script defer src="js/home.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-  <script defer src="home.js"></script>
+
+  <!-- ✅ Corrected paths -->
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="preload" href="css/home.css" as="style">
+  <link rel="preload" href="js/home.js" as="script">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- ✅ Corrected JS path -->
+  <script defer src="js/home.js"></script>
 </head>
 
 <body>
-  <!-- Loader -->
-  <div id="loader">
-    <div class="spinner"></div>
+  <div class="navbar">
+    <img src="logo.png" alt="CzarVision Logo" />
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="mylist.html">My List</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+    </div>
   </div>
 
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo-wrapper">
-      <img src="logo.png" alt="CzarVision Logo" class="logo" />
-    </div>
+  <div class="banner" id="banner">
+    <h1 id="banner-title"></h1>
+  </div>
 
-    <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="#">Movies</a>
-      <a href="#">Series</a>
-      <a href="#">Anime</a>
-      <a href="#">My List</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
-    </nav>
+  <!-- My List Row (auto-hide if empty) -->
+  <div class="row" id="mylist-row" style="display: none;">
+    <h2>My List</h2>
+    <div class="list" id="mylist"></div>
+  </div>
 
-    <!-- Hamburger for mobile -->
-    <div class="hamburger" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
-  </header>
+  <div class="row">
+    <h2>Trending Movies</h2>
+    <div class="list" id="movies-list"></div>
+  </div>
 
-  <!-- Sidebar Menu (Mobile) -->
-  <aside class="sidebar" id="sidebar">
-    <span class="closebtn" onclick="toggleMenu()">&times;</span>
-    <a href="index.html">Home</a>
-    <a href="#">Movies</a>
-    <a href="#">Series</a>
-    <a href="#">Anime</a>
-    <a href="#">My List</a>
-  </aside>
+  <div class="row">
+    <h2>Trending TV Shows</h2>
+    <div class="list" id="tvshows-list"></div>
+  </div>
 
-  <!-- Banner -->
-  <section class="banner" id="banner">
-    <div class="banner-content">
-      <h1 id="banner-title"></h1>
-      <button class="btn" onclick="openSearchModal()"><i class="fas fa-play"></i> Explore</button>
-      <button class="btn btn-secondary" onclick="toggleTheme()"><i class="fas fa-adjust"></i> Theme</button>
-    </div>
-  </section>
-
-  <!-- Rows -->
-  <main>
-    <div class="row">
-      <h2>Trending Now</h2>
-      <div class="list" id="trending-list"></div>
-    </div>
-
-    <div class="row">
-      <h2>Action</h2>
-      <div class="list" id="action-list"></div>
-    </div>
-
-    <div class="row">
-      <h2>Comedy</h2>
-      <div class="list" id="comedy-list"></div>
-    </div>
-
-    <div class="row">
-      <h2>Horror</h2>
-      <div class="list" id="horror-list"></div>
-    </div>
-
-    <div class="row">
-      <h2>Romance</h2>
-      <div class="list" id="romance-list"></div>
-    </div>
-
-    <div class="row">
-      <h2>Sci-Fi</h2>
-      <div class="list" id="scifi-list"></div>
-    </div>
-
-    <div class="row">
-      <h2>Anime</h2>
-      <div class="list" id="anime-list"></div>
-    </div>
-  </main>
+  <div class="row">
+    <h2>Trending Anime</h2>
+    <div class="list" id="anime-list"></div>
+  </div>
 
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+      <span class="close" onclick="closeModal()" style="color: red;">&times;</span>
       <div class="modal-body">
         <img id="modal-image" src="" alt="" />
         <div class="modal-text">
           <h2 id="modal-title"></h2>
           <div class="stars" id="modal-rating"></div>
           <p id="modal-description"></p>
-          <button class="btn" id="watch-trailer" onclick="watchTrailer()">🎬 Watch Trailer</button>
-          <button class="btn btn-secondary" onclick="toggleWatchlist()">❤️ Add to My List</button>
         </div>
       </div>
+      
       <div class="server-selector">
         <label for="server">Change Server:</label>
         <select id="server" onchange="changeServer()">
@@ -122,7 +79,7 @@
 
   <!-- Search Modal -->
   <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()">&times;</span>
+    <span class="close" onclick="closeSearchModal()" style="color: red;">&times;</span>
     <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
     <div class="results" id="search-results"></div>
   </div>
@@ -140,4 +97,3 @@
   </footer>
 </body>
 </html>
-
