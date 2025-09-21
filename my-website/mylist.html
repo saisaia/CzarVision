@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My List - CzarVision</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="preload" href="css/home.css" as="style">
+
+  <!-- Manifest + Icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- JS -->
+  <script defer src="js/home.js"></script>
+</head>
+
+<body>
+  <div class="navbar">
+    <img src="logo.png" alt="CzarVision Logo" />
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="mylist.html" class="active">My List</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+    </div>
+  </div>
+
+  <div class="row">
+    <h2>My List</h2>
+    <div class="list" id="mylist-page"></div>
+  </div>
+
+  <div id="empty-list-message" style="text-align:center; margin: 40px; display:none;">
+    <p>Your list is empty. Add some movies or shows to see them here!</p>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 CzarVision. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Disclaimer</a>
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const listContainer = document.getElementById("mylist-page");
+      const emptyMessage = document.getElementById("empty-list-message");
+
+      const myList = JSON.parse(localStorage.getItem("myList")) || [];
+
+      if (myList.length === 0) {
+        emptyMessage.style.display = "block";
+        return;
+      }
+
+      myList.forEach(item => {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("list-item");
+
+        const img = document.createElement("img");
+        img.src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+        img.alt = item.title || item.name;
+        img.onclick = () => showDetails(item);
+
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.classList.add("remove-btn");
+        removeBtn.onclick = () => {
+          let updatedList = myList.filter(i => i.id !== item.id);
+          localStorage.setItem("myList", JSON.stringify(updatedList));
+          wrapper.remove();
+          if (updatedList.length === 0) emptyMessage.style.display = "block";
+        };
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        listContainer.appendChild(wrapper);
+      });
+    });
+  </script>
+</body>
+</html>
