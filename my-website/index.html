@@ -1,110 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CzarVision — Movies & TV</title>
-
-  <!-- favicon (put your logo file in repo) -->
-  <link rel="icon" href="czarvision-logo.png" />
-
-  <!-- main stylesheet -->
-  <link rel="stylesheet" href="home.css" />
-
-  <!-- defer script so DOM exists -->
-  <script src="home.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CzarVision - Movie Hub</title>
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <header class="navbar" role="banner">
-    <a class="brand" href="index.html">
-      <img src="czarvision-logo.png" alt="CzarVision logo" class="logo" />
-      <span class="brand-name">CzarVision</span>
-    </a>
-
-    <div class="nav-actions">
-      <button id="search-open" class="icon-btn" title="Search (press /)">🔍</button>
+  <!-- Navbar -->
+  <div class="navbar">
+    <img src="czarvision-logo-light.png" alt="CzarVision Logo" class="logo">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()">
     </div>
+  </div>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <h1>Welcome to CzarVision</h1>
+    <p>Your ultimate hub for movies, reviews, and more.</p>
+    <button class="cta" onclick="openSearchModal()">Search Movies</button>
   </header>
 
-  <main>
-    <!-- banner -->
-    <section id="banner" class="banner" aria-label="Featured">
-      <div class="banner-inner">
-        <h1 id="banner-title">Loading featured...</h1>
-        <div class="banner-meta">
-          <span id="banner-year"></span>
-          <span id="banner-rating"></span>
-        </div>
-        <div class="banner-cta">
-          <button class="cta" id="banner-play">Watch</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- content -->
-    <section class="container" aria-live="polite">
-      <div class="row">
-        <h2>Trending Movies</h2>
-        <div id="movies-list" class="list"></div>
-      </div>
-
-      <div class="row">
-        <h2>Trending TV Shows</h2>
-        <div id="tvshows-list" class="list"></div>
-      </div>
-
-      <div class="row">
-        <h2>Trending Anime</h2>
-        <div id="anime-list" class="list"></div>
-      </div>
-    </section>
+  <!-- Movie Grid -->
+  <main class="movie-grid">
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x450" alt="Movie 1">
+      <h3>Sample Movie 1</h3>
+    </div>
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x450" alt="Movie 2">
+      <h3>Sample Movie 2</h3>
+    </div>
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x450" alt="Movie 3">
+      <h3>Sample Movie 3</h3>
+    </div>
   </main>
 
-  <!-- Details modal -->
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-label="Details dialog">
-    <div class="modal-content" role="document">
-      <button class="close-btn" id="modal-close" aria-label="Close">✕</button>
-
-      <div class="modal-body">
-        <img id="modal-image" src="" alt="Poster" />
-        <div class="modal-text">
-          <h3 id="modal-title">Title</h3>
-          <p id="modal-description" class="muted">Overview</p>
-          <div class="meta-line">
-            <span id="modal-rating" class="stars"></span>
-            <select id="server" class="server-select" aria-label="Choose server">
-              <option value="vidsrc.cc">vidsrc.cc</option>
-              <option value="vidsrc.me">vidsrc.me</option>
-              <option value="player.videasy.net">videasy</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="player-wrap">
-        <iframe id="modal-video" title="Player" frameborder="0" allowfullscreen></iframe>
-      </div>
+  <!-- Search Modal -->
+  <div id="searchModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeSearchModal()">&times;</span>
+      <h2>Search Movies</h2>
+      <input type="text" id="modalSearchInput" placeholder="Type a movie title...">
+      <button onclick="performSearch()">Search</button>
+      <div id="searchResults"></div>
     </div>
   </div>
 
-  <!-- Search modal -->
-  <div id="search-modal" class="search-modal" aria-hidden="true">
-    <div class="search-panel" role="search">
-      <button id="search-close" class="close-search" aria-label="Close search">✕</button>
-      <input id="search-input" class="search-input" placeholder="Search movies, TV, anime..." aria-label="Search" />
-      <div id="search-results" class="search-results"></div>
-    </div>
-  </div>
-
-  <footer class="footer" role="contentinfo">
-    <div class="footer-content">
-      <div>© CzarVision — curated with ❤️</div>
-      <div class="footer-links">
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-        <a href="#">Privacy</a>
-      </div>
-    </div>
-  </footer>
+  <script src="home.js"></script>
 </body>
 </html>
