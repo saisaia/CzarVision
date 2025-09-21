@@ -1,102 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CzarVision</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/home.css">
   <link rel="preload" href="css/home.css" as="style">
 
-  <!-- Manifest + Icons -->
-  <link rel="manifest" href="manifest.json">
+  <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- JS -->
   <script defer src="js/home.js"></script>
 </head>
-
 <body>
-  <!-- Navbar -->
-  <div class="navbar">
-    <img src="logo.png" alt="CzarVision Logo" />
-    <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="mylist.html">My List</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader" class="page-loader" aria-hidden="false">
+    <div class="loader-ring"><div></div></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="navbar" role="banner">
+    <div class="left-side">
+      <div class="logo-wrap" title="CzarVision">
+        <img src="logo.png" alt="CzarVision logo" class="logo"/>
+      </div>
+      <button class="menu-btn" id="hamburger" aria-label="Open menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
     </div>
-  </div>
 
-  <!-- Banner -->
-  <div class="banner" id="banner">
-    <div class="banner-overlay">
-      <h1 id="banner-title"></h1>
-      <p id="banner-overview"></p>
-      <button id="banner-play" class="btn"><i class="fa fa-play"></i> Play</button>
-      <button id="banner-list" class="btn"><i class="fa fa-plus"></i> My List</button>
+    <nav class="nav-links" id="nav-links" role="navigation" aria-label="Main navigation">
+      <a href="index.html" class="nav-item active">Home</a>
+      <a href="mylist.html" class="nav-item">My List</a>
+      <a href="#" class="nav-item">Movies</a>
+      <a href="#" class="nav-item">Series</a>
+    </nav>
+
+    <div class="right-side">
+      <div class="search-wrapper">
+        <input id="top-search" class="search-input" placeholder="Search (press /)" aria-label="Search" />
+        <button id="open-search" class="icon-btn" aria-label="Open search"><i class="fas fa-search"></i></button>
+      </div>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
     </div>
-  </div>
+  </header>
 
-  <!-- Rows -->
-  <div class="row">
-    <h2>Trending Movies</h2>
-    <div class="list" id="movies-list"></div>
-  </div>
+  <!-- MOBILE SIDEBAR -->
+  <aside id="sidebar" class="sidebar" aria-hidden="true">
+    <button class="close-side" id="close-sidebar" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="mylist.html">My List</a>
+    <a href="#">Movies</a>
+    <a href="#">Series</a>
+  </aside>
 
-  <div class="row">
-    <h2>Trending TV Shows</h2>
-    <div class="list" id="tvshows-list"></div>
-  </div>
+  <!-- BANNER -->
+  <section id="banner" class="banner" role="region" aria-label="Featured">
+    <div class="banner-dim"></div>
+    <div class="banner-content">
+      <h1 id="banner-title">Loading featured...</h1>
+      <p id="banner-overview" class="muted"></p>
+      <div class="banner-ctas">
+        <button id="banner-play" class="btn primary"><i class="fas fa-play"></i> Play</button>
+        <button id="banner-watchlist" class="btn ghost"><i class="fas fa-plus"></i> My List</button>
+      </div>
+    </div>
 
-  <div class="row">
-    <h2>Trending Anime</h2>
-    <div class="list" id="anime-list"></div>
-  </div>
+    <div class="banner-controls">
+      <button id="banner-prev" class="icon-btn"><i class="fas fa-chevron-left"></i></button>
+      <button id="banner-next" class="icon-btn"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </section>
 
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+  <!-- MAIN ROWS -->
+  <main id="main" class="main">
+    <section class="row" id="row-mylist" style="display:none">
+      <h2>My List</h2>
+      <div class="row-inner" id="mylist-row"></div>
+    </section>
+
+    <section class="row">
+      <h2>Trending Now</h2>
+      <div class="row-inner" id="trending-list"></div>
+    </section>
+
+    <section class="row">
+      <h2>Action</h2>
+      <div class="row-inner" id="action-list"></div>
+    </section>
+
+    <section class="row">
+      <h2>Comedy</h2>
+      <div class="row-inner" id="comedy-list"></div>
+    </section>
+
+    <section class="row">
+      <h2>Horror</h2>
+      <div class="row-inner" id="horror-list"></div>
+    </section>
+
+    <section class="row">
+      <h2>Sci-Fi</h2>
+      <div class="row-inner" id="scifi-list"></div>
+    </section>
+
+    <section class="row">
+      <h2>Anime</h2>
+      <div class="row-inner" id="anime-list"></div>
+    </section>
+  </main>
+
+  <!-- DETAILS MODAL -->
+  <div id="modal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content" role="document">
+      <button id="modal-close" class="modal-close" aria-label="Close">&times;</button>
       <div class="modal-body">
-        <img id="modal-image" src="" alt="" />
-        <div class="modal-text">
-          <h2 id="modal-title"></h2>
-          <div class="stars" id="modal-rating"></div>
+        <img id="modal-image" src="" alt="Poster" />
+        <div class="modal-info">
+          <h3 id="modal-title"></h3>
+          <div id="modal-meta" class="muted"></div>
+          <div id="modal-rating" class="stars"></div>
           <p id="modal-description"></p>
-          <button id="add-to-list-btn" class="list-btn">+ Add to My List</button>
+          <div class="modal-actions">
+            <button id="modal-play" class="btn primary"><i class="fas fa-play"></i> Play</button>
+            <button id="modal-trailer" class="btn ghost"><i class="fas fa-film"></i> Trailer</button>
+            <button id="modal-watchlist" class="btn list-btn"><i class="fas fa-plus"></i> Add to My List</button>
+          </div>
         </div>
       </div>
-      
-      <div class="server-selector">
-        <label for="server">Change Server:</label>
-        <select id="server" onchange="changeServer()">
-          <option value="vidsrc.cc">Vidsrc.cc</option>
-          <option value="vidsrc.me">Vidsrc.me</option>
-          <option value="player.videasy.net">Player.Videasy.net</option>
+
+      <div class="server-row">
+        <label for="server">Embed server</label>
+        <select id="server">
+          <option value="vidsrc.cc">vidsrc.cc</option>
+          <option value="vidsrc.me">vidsrc.me</option>
+          <option value="player.videasy.net">player.videasy.net</option>
         </select>
       </div>
-      <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+
+      <div class="iframe-wrap">
+        <iframe id="modal-video" src="" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 
-  <!-- Search Modal -->
-  <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()">&times;</span>
-    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
-    <div class="results" id="search-results"></div>
+  <!-- SEARCH MODAL -->
+  <div id="search-modal" class="search-modal" aria-hidden="true">
+    <button id="search-close" class="search-close" aria-label="Close search">&times;</button>
+    <input id="search-input" class="search-field" placeholder="Search movies, TV..." />
+    <div id="search-results" class="search-results"></div>
   </div>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-content">
-      <p>&copy; 2025 CzarVision. All rights reserved.</p>
+    <div class="footer-inner">
+      <div class="brand">© 2025 CzarVision</div>
       <div class="footer-links">
-        <a href="#">Disclaimer</a>
-        <a href="#">About Us</a>
-        <a href="#">Contact Us</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
       </div>
     </div>
   </footer>
+
 </body>
 </html>
