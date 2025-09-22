@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   background: #111;
   color: #fff;
   overflow-x: hidden;
@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 10px 20px;
   background: rgba(20, 20, 20, 0.95);
   position: sticky;
   top: 0;
@@ -26,8 +26,8 @@ body {
 }
 
 .navbar img {
-  height: 45px;
-  max-width: 120px;
+  height: 40px;
+  max-height: 50px;
   filter: brightness(0) invert(1);
   transition: transform 0.3s ease;
 }
@@ -64,12 +64,12 @@ body {
 /* ========== Banner ========== */
 .banner {
   position: relative;
-  height: 70vh;
+  height: 65vh;
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: flex-end;
-  padding: 40px;
+  padding: 20px 40px;
   color: white;
   transition: background-image 1s ease-in-out;
 }
@@ -85,7 +85,7 @@ body {
 }
 
 .banner h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 15px;
 }
 
@@ -161,7 +161,7 @@ body {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.95);
   display: none;
   justify-content: center;
   align-items: center;
@@ -201,10 +201,6 @@ body {
 .modal-text {
   flex: 1;
   text-align: left;
-}
-
-.modal img {
-  border-radius: 8px;
 }
 
 .stars {
@@ -270,6 +266,7 @@ body {
 
 .search-modal input {
   width: 300px;
+  max-width: 90%;
   padding: 10px;
   border-radius: 5px;
   border: none;
@@ -328,30 +325,89 @@ body {
   color: #fff;
 }
 
+/* ========== My List Page ========== */
+.list-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.remove-btn {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #444;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.remove-btn:hover {
+  background: #e50914;
+}
+
 /* ========== Responsive ========== */
 @media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar img {
+    height: 35px;
+  }
+
   .banner {
     height: 50vh;
-    padding: 20px;
+    padding: 15px 20px;
   }
-  .banner h1 { font-size: 2rem; }
-  .banner p { font-size: 0.9rem; }
-  .modal-body { flex-direction: column; align-items: center; }
-  .modal-body img { width: 60%; }
-  .modal-text { text-align: center; }
-  .list img { width: 120px; }
+
+  .banner h1 {
+    font-size: 2rem;
+  }
+
+  .banner p {
+    font-size: 0.9rem;
+  }
+
+  .modal-body {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .modal-body img {
+    width: 60%;
+  }
+
+  .modal-text {
+    text-align: center;
+  }
+
+  .list img {
+    width: 120px;
+  }
+
+  .search-modal input {
+    width: 90%;
+  }
+
+  .search-modal img {
+    width: 100px;
+  }
 }
 
 @media (max-width: 480px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 15px;
+  .banner h1 {
+    font-size: 1.5rem;
   }
-  .nav-links { margin-top: 10px; gap: 8px; }
-  .banner h1 { font-size: 1.5rem; }
-  .banner p { font-size: 0.8rem; }
-  .modal-content { width: 95%; padding: 15px; }
-  .search-modal input { width: 90%; }
-  .search-modal img { width: 100px; }
+
+  .banner p {
+    font-size: 0.8rem;
+  }
+
+  .navbar img {
+    height: 30px;
+  }
 }
