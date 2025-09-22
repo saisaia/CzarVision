@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CzarVision</title>
 
   <!-- CSS -->
@@ -15,14 +15,16 @@
   <!-- JS -->
   <script defer src="js/home.js"></script>
 </head>
+
 <body>
+
   <!-- Navbar -->
   <div class="navbar">
     <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo"/>
     <div class="nav-links">
-      <a href="index.html">Home</a>
+      <a href="index.html" class="active">Home</a>
       <a href="mylist.html">My List</a>
-      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()"/>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
     </div>
   </div>
 
@@ -36,34 +38,26 @@
     </div>
   </div>
 
-  <!-- My List Row -->
-  <div class="row" id="mylist-row" style="display: none;">
-    <h2>My List</h2>
-    <div class="list" id="mylist"></div>
-  </div>
-
-  <!-- Trending Movies -->
+  <!-- Trending Sections -->
   <div class="row">
     <h2>Trending Movies</h2>
     <div class="list" id="movies-list"></div>
   </div>
 
-  <!-- Trending TV Shows -->
   <div class="row">
     <h2>Trending TV Shows</h2>
     <div class="list" id="tvshows-list"></div>
   </div>
 
-  <!-- Trending Anime -->
   <div class="row">
     <h2>Trending Anime</h2>
     <div class="list" id="anime-list"></div>
   </div>
 
-  <!-- Video Modal -->
+  <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()" style="color:red;">&times;</span>
+      <span class="close" onclick="closeModal()">&times;</span>
       <div class="modal-body">
         <img id="modal-image" src="" alt="" />
         <div class="modal-text">
@@ -81,14 +75,14 @@
           <option value="player.videasy.net">Player.Videasy.net</option>
         </select>
       </div>
-      <video id="modal-video" width="100%" height="400" controls autoplay></video>
+      <iframe id="modal-video" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
 
   <!-- Search Modal -->
   <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()" style="color:red;">&times;</span>
-    <input type="text" id="search-input" placeholder="Search for a movie, TV show, or anime..." oninput="searchContent()"/>
+    <span class="close" onclick="closeSearchModal()">&times;</span>
+    <input type="text" id="search-input" placeholder="Search for a movie, TV show, or anime..." oninput="searchContent()" />
     <div class="results" id="search-results"></div>
   </div>
 
@@ -103,5 +97,6 @@
       </div>
     </div>
   </footer>
+
 </body>
 </html>
