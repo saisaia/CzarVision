@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CzarVision</title>
-  <link rel="stylesheet" href="home.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/home.css">
+
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- JS -->
+  <script defer src="js/home.js"></script>
 </head>
 <body>
 
   <!-- Navbar -->
   <div class="navbar">
-    <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo"/>
+    <img src="czarvision-logo.png" alt="CzarVision Logo" />
     <div class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="mylist.html">My List</a>
@@ -28,7 +36,7 @@
     </div>
   </div>
 
-  <!-- Movie Sections -->
+  <!-- Trending Sections -->
   <div class="row">
     <h2>Trending Movies</h2>
     <div class="list" id="movies-list"></div>
@@ -44,20 +52,10 @@
     <div class="list" id="anime-list"></div>
   </div>
 
-  <div class="row">
-    <h2>Filipino Movies</h2>
-    <div class="list" id="filipino-movies-list"></div>
-  </div>
-
-  <div class="row">
-    <h2>Filipino TV Shows</h2>
-    <div class="list" id="filipino-tv-list"></div>
-  </div>
-
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+      <span class="close" onclick="closeModal()" style="color: red;">&times;</span>
       <div class="modal-body">
         <img id="modal-image" src="" alt="" />
         <div class="modal-text">
@@ -81,7 +79,7 @@
 
   <!-- Search Modal -->
   <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()">&times;</span>
+    <span class="close" onclick="closeSearchModal()" style="color: red;">&times;</span>
     <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
     <div class="results" id="search-results"></div>
   </div>
@@ -98,6 +96,5 @@
     </div>
   </footer>
 
-  <script src="home.js"></script>
 </body>
 </html>
