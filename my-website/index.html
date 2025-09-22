@@ -20,14 +20,11 @@
       background:linear-gradient(180deg,#04070a,#071019 60%);
       color:#e6eef6;
       -webkit-font-smoothing:antialiased;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
     }
     a{color:inherit;text-decoration:none}
-
     .wrap{max-width:1200px;margin:18px auto;padding:18px}
 
-    /* ===== NAVBAR ===== */
+    /* NAV */
     .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.15));backdrop-filter:blur(6px);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
     .brand{display:flex;align-items:center;gap:12px}
     .brand img{height:46px;width:auto;border-radius:8px;padding:6px;background:rgba(0,0,0,0.3)}
@@ -39,7 +36,7 @@
     .search input{padding:10px 36px 10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:#071826;color:#dbefff;width:260px}
     .search .fa-search{position:absolute;right:12px;top:10px;opacity:0.7;cursor:pointer}
 
-    /* ===== BANNER ===== */
+    /* BANNER */
     .banner{height:56vh;border-radius:12px;overflow:hidden;display:flex;align-items:flex-end;padding:34px;background-size:cover;background-position:center;position:relative;margin:18px 0;box-shadow:0 30px 80px rgba(0,0,0,0.6);transition:background-image .8s ease}
     .banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%, rgba(5,8,12,0.95) 85%)}
     .banner-content{position:relative;z-index:2;max-width:60%}
@@ -50,11 +47,13 @@
     .btn.play{background:linear-gradient(90deg,var(--danger),#ff6b6b);color:#fff}
     .btn.list{background:rgba(255,255,255,0.04);color:#fff}
 
-    /* ===== AD BOX ===== */
-    .ad-box{margin:14px 0;text-align:center}
-    .ad-box div{display:inline-block}
+    /* AD BOX */
+    .ad-box{margin:14px 0;text-align:center;min-height:90px;display:flex;align-items:center;justify-content:center}
+    .ad-fallback{background:linear-gradient(90deg,#222,#111);color:#fff;padding:12px;border-radius:8px;display:inline-block;max-width:100%;text-align:center}
+    .ad-fallback img{max-width:100%;height:auto;border-radius:6px;display:block;margin-bottom:8px}
+    .ad-fallback a{display:inline-block;padding:8px 12px;border-radius:6px;background:#0ff;color:#000;font-weight:700}
 
-    /* ===== SECTIONS & CARDS ===== */
+    /* SECTIONS & CARDS */
     .section{margin:18px 0}
     .section .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .section h3{font-size:1.05rem}
@@ -72,7 +71,7 @@
     .list::-webkit-scrollbar{height:10px}
     .list::-webkit-scrollbar-thumb{background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:999px}
 
-    /* ===== MODAL ===== */
+    /* MODAL */
     .modal{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(0,0,0,0.85));display:none;align-items:center;justify-content:center;padding:22px;z-index:999}
     .modal.open{display:flex}
     .modal-card{background:#07131a;border-radius:12px;max-width:1100px;width:100%;overflow:hidden;display:flex;gap:14px;position:relative}
@@ -94,14 +93,14 @@
     .person img{width:72px;height:72px;border-radius:10px;object-fit:cover}
     .person .name{font-size:0.82rem;margin-top:6px}
 
-    /* ===== SIDE ADS ===== */
+    /* SIDE ADS */
     .side-ads {position:fixed;top:120px;z-index:950;display:flex;flex-direction:column;gap:12px}
     .side-ads.left{left:10px}
     .side-ads.right{right:10px}
-    .side-ads .ad-mini{width:160px;height:600px;background:#0b0b0c;border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .side-ads .ad-mini{width:160px;height:600px;background:#0b0b0c;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:8px}
     @media (max-width:1024px){ .side-ads{display:none} }
 
-    /* ===== INTERSTITIAL ===== */
+    /* INTERSTITIAL */
     .interstitial {position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:2000;color:#fff}
     .interstitial .skip {margin-top:18px;padding:10px 18px;border-radius:8px;border:none;background:var(--danger);color:#fff;cursor:pointer}
 
@@ -112,9 +111,11 @@
       .modal-card{flex-direction:column}
       .modal-media{width:100%;height:320px}
       .search input{width:160px}
+      .side-ads{display:none}
     }
     footer{padding:24px 0;margin-top:26px;color:#9fb6d1;text-align:center;font-size:0.9rem}
-    /* subtle animations */
+
+    /* small animation */
     .fade-in { animation: fadeIn .45s ease both; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform:none; } }
   </style>
@@ -153,9 +154,9 @@
 
       <!-- Banner Ad (under banner) -->
       <div class="ad-box" id="banner-ad">
-        <!-- ad snippet (user-provided) -->
+        <!-- user-provided snippet (banner placement) -->
         <script async="async" data-cfasync="false" src="//pl27692749.revenuecpmgate.com/051c2b1a03281d7108e616ba24e1a82f/invoke.js"></script>
-        <div id="container-051c2b1a03281d7108e616ba24e1a82f"></div>
+        <div id="container-051c2b1a03281d7108e616ba24e1a82f-banner"></div>
       </div>
 
       <section class="section">
@@ -211,10 +212,10 @@
               </select>
             </div>
 
-            <!-- Ad inside modal above player -->
+            <!-- Ad inside modal above player (provided snippet) -->
             <div class="ad-box" id="modal-ad">
               <script async="async" data-cfasync="false" src="//pl27692749.revenuecpmgate.com/051c2b1a03281d7108e616ba24e1a82f/invoke.js"></script>
-              <div id="container-051c2b1a03281d7108e616ba24e1a82f"></div>
+              <div id="container-051c2b1a03281d7108e616ba24e1a82f-modal"></div>
             </div>
 
             <iframe id="streamFrame" width="100%" height="320" frameborder="0" allowfullscreen title="Player"></iframe>
@@ -225,17 +226,17 @@
       </div>
     </div>
 
-    <!-- Side Ads (floating) -->
+    <!-- Side Ads (floating) - right and left, using snippet but unique container IDs -->
     <div class="side-ads left" aria-hidden="true">
-      <div class="ad-mini">
+      <div class="ad-mini" id="side-ad-left">
         <script async="async" data-cfasync="false" src="//pl27692749.revenuecpmgate.com/051c2b1a03281d7108e616ba24e1a82f/invoke.js"></script>
-        <div id="container-051c2b1a03281d7108e616ba24e1a82f"></div>
+        <div id="container-051c2b1a03281d7108e616ba24e1a82f-left"></div>
       </div>
     </div>
     <div class="side-ads right" aria-hidden="true">
-      <div class="ad-mini">
+      <div class="ad-mini" id="side-ad-right">
         <script async="async" data-cfasync="false" src="//pl27692749.revenuecpmgate.com/051c2b1a03281d7108e616ba24e1a82f/invoke.js"></script>
-        <div id="container-051c2b1a03281d7108e616ba24e1a82f"></div>
+        <div id="container-051c2b1a03281d7108e616ba24e1a82f-right"></div>
       </div>
     </div>
 
@@ -243,9 +244,9 @@
     <div class="interstitial" id="interstitial">
       <div style="text-align:center;color:#fff">
         <h2>Sponsored</h2>
-        <div style="margin:18px 0">
+        <div style="margin:18px 0" id="interstitial-ad-wrap">
           <script async="async" data-cfasync="false" src="//pl27692749.revenuecpmgate.com/051c2b1a03281d7108e616ba24e1a82f/invoke.js"></script>
-          <div id="container-051c2b1a03281d7108e616ba24e1a82f"></div>
+          <div id="container-051c2b1a03281d7108e616ba24e1a82f-interstitial"></div>
         </div>
         <button class="skip" id="interstitial-skip" style="display:none">Skip Ad</button>
       </div>
@@ -256,7 +257,7 @@
 
   <script>
   // ================== CONFIG ==================
-  const TMDB_API_KEY = '610f63ddc0fd1c34901a203b7eea62cc'; // your real key as requested
+  const TMDB_API_KEY = '610f63ddc0fd1c34901a203b7eea62cc'; // your provided key
   const TMDB_BASE = 'https://api.themoviedb.org/3';
   const IMG_W500 = 'https://image.tmdb.org/t/p/w500';
   const IMG_ORIG = 'https://image.tmdb.org/t/p/original';
@@ -426,7 +427,6 @@
     const inter = interstitial;
     if(!inter) { setStream(); return; }
     inter.style.display = 'flex';
-    // show Skip after 3s
     const t = setTimeout(()=> {
       inter.style.display = 'none';
       setStream();
@@ -440,18 +440,16 @@
     interstitial.style.display='none';
   }
 
-  // Force interstitial on page load (separate from watch-triggered interstitial)
+  // Force interstitial on page load
   function showStartupInterstitial(){
     if(!interstitial) return;
     interstitial.style.display = 'flex';
-    // show skip after 4s
     setTimeout(()=> interstitialSkip.style.display='inline-block', 4000);
-    // auto hide after 12s if not skipped
     const t = setTimeout(()=> { interstitial.style.display='none'; interstitialSkip.style.display='none'; }, 12000);
     interstitialSkip.onclick = ()=> { clearTimeout(t); interstitial.style.display='none'; interstitialSkip.style.display='none'; };
   }
 
-  // ================== My List (localStorage) ==================
+  // My List (localStorage)
   function getMyList(){ try{ return JSON.parse(localStorage.getItem('czar_mylist') || '[]'); } catch(e){ return []; } }
   function saveMyList(list){ localStorage.setItem('czar_mylist', JSON.stringify(list)); }
 
@@ -487,7 +485,7 @@
     return div;
   }
 
-  // ================== Search (text + voice) ==================
+  // Search (text + voice)
   let searchTimer = null;
   if (searchBar) {
     searchBar.addEventListener('input', (e)=>{
@@ -519,7 +517,7 @@
     }catch(e){ console.error('search error', e); }
   }
 
-  // ================== Genres & Content ==================
+  // Genres & Content
   async function initGenres(){
     try{
       const json = await fetchJSON(`${TMDB_BASE}/genre/movie/list?api_key=${TMDB_API_KEY}`);
@@ -593,8 +591,50 @@
     renderMyList();
     // show forced interstitial 1.5s after load
     setTimeout(()=> showStartupInterstitial(), 1500);
+
+    // run ad fallbacks if the ad provider didn't render something in the containers
+    setTimeout(()=> ensureAdFallbacks(), 2200);
   }
   document.addEventListener('DOMContentLoaded', init);
+
+  // ================== AD FALLBACKS ==================
+  // Because ad networks sometimes don't show creatives in local/dev, ensure you see placeholders so testing is easy.
+  function ensureAdFallbacks(){
+    // list of container IDs used above
+    const containers = [
+      'container-051c2b1a03281d7108e616ba24e1a82f-banner',
+      'container-051c2b1a03281d7108e616ba24e1a82f-modal',
+      'container-051c2b1a03281d7108e616ba24e1a82f-left',
+      'container-051c2b1a03281d7108e616ba24e1a82f-right',
+      'container-051c2b1a03281d7108e616ba24e1a82f-interstitial'
+    ];
+    containers.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      // if the container is still empty (no child nodes), insert a friendly placeholder ad
+      if(el.children.length === 0){
+        const fallback = document.createElement('div');
+        fallback.className = 'ad-fallback';
+        fallback.innerHTML = `<img src="https://via.placeholder.com/728x90.png?text=Ad+Placeholder" alt="ad">
+                              <div>Ad by Adsterra (placeholder)</div>
+                              <a href="#" onclick="event.preventDefault();alert('This is a placeholder ad.');">Learn more</a>`;
+        el.appendChild(fallback);
+      }
+    });
+
+    // also ensure side ad wrappers show something if not filled
+    ['side-ad-left','side-ad-right'].forEach(id=>{
+      const wrapper = document.getElementById(id);
+      if(wrapper && wrapper.children.length === 0){
+        const fb = document.createElement('div');
+        fb.className = 'ad-fallback';
+        fb.style.width = '100%';
+        fb.style.height = '100%';
+        fb.innerHTML = `<img src="https://via.placeholder.com/160x600.png?text=Side+Ad" alt="side ad">`;
+        wrapper.appendChild(fb);
+      }
+    });
+  }
   </script>
 </body>
 </html>
