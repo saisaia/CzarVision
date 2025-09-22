@@ -17,10 +17,9 @@
 </head>
 
 <body>
-
   <!-- Navbar -->
   <div class="navbar">
-    <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo"/>
+    <img src="czarvision-logo.png" alt="CzarVision Logo" />
     <div class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="mylist.html">My List</a>
@@ -36,6 +35,12 @@
       <button id="banner-play">Play</button>
       <button id="banner-list">+ My List</button>
     </div>
+  </div>
+
+  <!-- My List Row -->
+  <div class="row" id="mylist-row" style="display: none;">
+    <h2>My List</h2>
+    <div class="list" id="mylist"></div>
   </div>
 
   <!-- Trending Sections -->
@@ -57,7 +62,7 @@
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+      <span class="close" onclick="closeModal()" style="color: red;">&times;</span>
       <div class="modal-body">
         <img id="modal-image" src="" alt="" />
         <div class="modal-text">
@@ -75,21 +80,21 @@
           <option value="player.videasy.net">Player.Videasy.net</option>
         </select>
       </div>
-      <iframe id="modal-video" width="100%" height="400px" frameborder="0" allowfullscreen></iframe>
+      <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
 
   <!-- Search Modal -->
   <div class="search-modal" id="search-modal">
-    <span class="close" onclick="closeSearchModal()">&times;</span>
-    <input type="text" id="search-input" placeholder="Search for a movie, TV show, or anime..." oninput="searchContent()" />
+    <span class="close" onclick="closeSearchModal()" style="color: red;">&times;</span>
+    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchContent()" />
     <div class="results" id="search-results"></div>
   </div>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
-      <p>&copy; 2025 CzarVision (JULIUS). All rights reserved.</p>
+      <p>&copy; 2025 CzarVision(JULIUS). All rights reserved.</p>
       <div class="footer-links">
         <a href="#">Disclaimer</a>
         <a href="#">About Us</a>
@@ -97,6 +102,5 @@
       </div>
     </div>
   </footer>
-
 </body>
 </html>
