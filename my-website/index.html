@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -16,18 +17,19 @@
 </head>
 
 <body>
+
   <!-- Navbar -->
-  <nav class="navbar">
+  <div class="navbar">
     <img src="czarvision-logo.png" alt="CzarVision Logo" class="logo"/>
     <div class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="mylist.html">My List</a>
       <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()"/>
     </div>
-  </nav>
+  </div>
 
   <!-- Banner -->
-  <section class="banner" id="banner">
+  <div class="banner" id="banner">
     <div class="banner-overlay">
       <h1 id="banner-title"></h1>
       <p id="banner-overview"></p>
@@ -36,29 +38,31 @@
         <button id="banner-list" class="btn">+ My List</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- My List Row -->
-  <section class="row" id="mylist-row" style="display: none;">
+  <!-- My List Row (auto-hide if empty) -->
+  <div class="row" id="mylist-row" style="display: none;">
     <h2>My List</h2>
     <div class="list" id="mylist"></div>
-  </section>
+  </div>
 
-  <!-- Trending Sections -->
-  <section class="row">
+  <!-- Trending Movies -->
+  <div class="row">
     <h2>Trending Movies</h2>
     <div class="list" id="movies-list"></div>
-  </section>
+  </div>
 
-  <section class="row">
+  <!-- Trending TV Shows -->
+  <div class="row">
     <h2>Trending TV Shows</h2>
     <div class="list" id="tvshows-list"></div>
-  </section>
+  </div>
 
-  <section class="row">
+  <!-- Trending Anime -->
+  <div class="row">
     <h2>Trending Anime</h2>
     <div class="list" id="anime-list"></div>
-  </section>
+  </div>
 
   <!-- Modal -->
   <div class="modal" id="modal">
@@ -88,7 +92,7 @@
   <!-- Search Modal -->
   <div class="search-modal" id="search-modal">
     <span class="close" onclick="closeSearchModal()">&times;</span>
-    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchContent()"/>
+    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()"/>
     <div class="results" id="search-results"></div>
   </div>
 
@@ -101,5 +105,6 @@
       <a href="#">Contact Us</a>
     </div>
   </footer>
+
 </body>
 </html>
