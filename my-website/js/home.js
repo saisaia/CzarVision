@@ -3,64 +3,45 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/original';
 let currentItem;
 
-// Lupet APIs
-const LUPET_MOVIE_API = 'https://apimocine.vercel.app/movie/';
-const LUPET_TV_API = 'https://apimocine.vercel.app/tv/';
-
-// Fetch TMDB Trending
+// ================== Fetch Functions ==================
 async function fetchTrending(type) {
-  try {
-    const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
-    const data = await res.json();
-    return data.results;
-  } catch (err) {
-    console.error(`TMDB ${type} fetch error:`, err);
-    return [];
-  }
+  const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+  const data = await res.json();
+  return data.results;
 }
 
 async function fetchTrendingAnime() {
   let allResults = [];
   for (let page = 1; page <= 3; page++) {
-    try {
-      const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
-      const data = await res.json();
-      const filtered = data.results.filter(item =>
-        item.original_language === 'ja' && item.genre_ids.includes(16)
-      );
-      allResults = allResults.concat(filtered);
-    } catch (err) {
-      console.error("Anime fetch error:", err);
-    }
+    const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
+    const data = await res.json();
+    const filtered = data.results.filter(item => item.original_language === 'ja' && item.genre_ids.includes(16));
+    allResults = allResults.concat(filtered);
   }
   return allResults;
 }
 
-// Fetch Lupet API
-async function fetchLupetAPI(apiUrl) {
-  try {
-    const res = await fetch(apiUrl);
-    const data = await res.json();
-    return data.results || data;
-  } catch (err) {
-    console.error("Lupet API fetch error:", err);
-    return [];
-  }
-}
-
-// Display Banner
+// ================== Banner ==================
 function displayBanner(item) {
   const banner = document.getElementById('banner');
   if (!banner) return;
-  banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
-  document.getElementById('banner-title').textContent = item.title || item.name;
-  document.getElementById('banner-overview').textContent = item.overview || "";
 
-  document.getElementById('banner-play').onclick = () => showDetails(item);
-  document.getElementById('banner-list').onclick = () => toggleMyList(item);
+  banner.style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
+
+  const titleEl = document.getElementById('banner-title');
+  if (titleEl) titleEl.textContent = item.title || item.name;
+
+  const overviewEl = document.getElementById('banner-overview');
+  if (overviewEl) overviewEl.textContent = item.overview || "";
+
+  const playBtn = document.getElementById('banner-play');
+  if (playBtn) playBtn.onclick = () => showDetails(item);
+
+  const listBtn = document.getElementById('banner-list');
+  if (listBtn) listBtn.onclick = () => toggleMyList(item);
 }
 
-// Display List
+// ================== Movie/Show List ==================
 function displayList(items, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -76,108 +57,145 @@ function displayList(items, containerId) {
   });
 }
 
-// Show Modal
+// ================== Modal ==================
 function showDetails(item) {
   currentItem = item;
-  document.getElementById('modal-title').textContent = item.title || item.name;
-  document.getElementById('modal-description').textContent = item.overview || '';
-  document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-  document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) modalTitle.textContent = item.title || item.name;
+
+  const modalDesc = document.getElementById('modal-description');
+  if (modalDesc) modalDesc.textContent = item.overview;
+
+  const modalImg = document.getElementById('modal-image');
+  if (modalImg) modalImg.src = `${IMG_URL}${item.poster_path}`;
+
+  const modalRating = document.getElementById('modal-rating');
+  if (modalRating) modalRating.innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
+
   changeServer();
   updateListButton(item);
 
   const modal = document.getElementById('modal');
-  modal.style.display = 'flex';
-
-  // Auto-play video
-  const iframe = document.getElementById('modal-video');
-  iframe.onload = () => iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+  if (modal) modal.style.display = 'flex';
 }
 
-// Change Server
 function changeServer() {
   if (!currentItem) return;
-  const server = document.getElementById('server').value;
+  const server = document.getElementById('server')?.value;
   const type = currentItem.media_type === "movie" ? "movie" : "tv";
   let embedURL = "";
 
-  if (server === "vidsrc.cc") embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-  else if (server === "vidsrc.me") embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
-  else if (server === "player.videasy.net") embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+  if (server === "vidsrc.cc") {
+    embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+  } else if (server === "vidsrc.me") {
+    embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+  } else if (server === "player.videasy.net") {
+    embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+  }
 
-  document.getElementById('modal-video').src = embedURL;
+  const iframe = document.getElementById('modal-video');
+  if (iframe) iframe.src = embedURL;
 }
 
-// Close Modal
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
-  document.getElementById('modal-video').src = '';
+  const modal = document.getElementById('modal');
+  if (modal) modal.style.display = 'none';
+  const iframe = document.getElementById('modal-video');
+  if (iframe) iframe.src = '';
 }
 
-// Search Modal
+// ================== Search ==================
 function openSearchModal() {
-  document.getElementById('search-modal').style.display = 'flex';
-  document.getElementById('search-input').focus();
+  const searchModal = document.getElementById('search-modal');
+  if (searchModal) {
+    searchModal.style.display = 'flex';
+    document.getElementById('search-input')?.focus();
+  }
 }
 
 function closeSearchModal() {
-  document.getElementById('search-modal').style.display = 'none';
-  document.getElementById('search-results').innerHTML = '';
+  const searchModal = document.getElementById('search-modal');
+  if (searchModal) searchModal.style.display = 'none';
+
+  const results = document.getElementById('search-results');
+  if (results) results.innerHTML = '';
 }
 
-async function searchContent() {
-  const query = document.getElementById('search-input').value.trim();
-  if (!query) return (document.getElementById('search-results').innerHTML = '');
+async function searchTMDB() {
+  const query = document.getElementById('search-input')?.value;
+  if (!query || !query.trim()) {
+    const results = document.getElementById('search-results');
+    if (results) results.innerHTML = '';
+    return;
+  }
+
   const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
   const data = await res.json();
+
   const container = document.getElementById('search-results');
+  if (!container) return;
   container.innerHTML = '';
   data.results.forEach(item => {
     if (!item.poster_path) return;
     const img = document.createElement('img');
     img.src = `${IMG_URL}${item.poster_path}`;
     img.alt = item.title || item.name;
-    img.onclick = () => { closeSearchModal(); showDetails(item); };
+    img.onclick = () => {
+      closeSearchModal();
+      showDetails(item);
+    };
     container.appendChild(img);
   });
 }
 
-// My List
+// ================== My List ==================
 function toggleMyList(item) {
   let myList = JSON.parse(localStorage.getItem("myList")) || [];
   const exists = myList.some(i => i.id === item.id);
-  if (exists) myList = myList.filter(i => i.id !== item.id);
-  else myList.push(item);
-  localStorage.setItem("myList", JSON.stringify(myList));
-  updateListButton(item);
+
+  const btn = document.getElementById("add-to-list-btn");
+
+  if (exists) {
+    myList = myList.filter(i => i.id !== item.id);
+    localStorage.setItem("myList", JSON.stringify(myList));
+    if (btn) btn.textContent = "+ Add to My List";
+  } else {
+    myList.push(item);
+    localStorage.setItem("myList", JSON.stringify(myList));
+    if (btn) btn.textContent = "✓ Added";
+  }
 }
 
 function updateListButton(item) {
-  const btn = document.getElementById("add-to-list-btn");
-  if (!btn) return;
   const myList = JSON.parse(localStorage.getItem("myList")) || [];
   const exists = myList.some(i => i.id === item.id);
+
+  const btn = document.getElementById("add-to-list-btn");
+  if (!btn) return;
+
   btn.textContent = exists ? "✓ Added" : "+ Add to My List";
   btn.onclick = () => toggleMyList(item);
 }
 
-// Init
+// ================== Init ==================
 async function init() {
   try {
     const movies = await fetchTrending('movie');
     const tvShows = await fetchTrending('tv');
     const anime = await fetchTrendingAnime();
+
     if (movies.length > 0) displayBanner(movies[Math.floor(Math.random() * movies.length)]);
     displayList(movies, 'movies-list');
     displayList(tvShows, 'tvshows-list');
     displayList(anime, 'anime-list');
 
-    const lupetMovies = await fetchLupetAPI(LUPET_MOVIE_API);
-    const lupetTV = await fetchLupetAPI(LUPET_TV_API);
-    displayList(lupetMovies, 'movies-list');
-    displayList(lupetTV, 'tvshows-list');
+    // Show My List row if not empty
+    const myList = JSON.parse(localStorage.getItem("myList")) || [];
+    const myListRow = document.getElementById("mylist-row");
+    if (myListRow) myListRow.style.display = myList.length > 0 ? "block" : "none";
+    displayList(myList, "mylist");
   } catch (err) {
-    console.error("Init error:", err);
+    console.error("Error initializing content:", err);
   }
 }
 
