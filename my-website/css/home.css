@@ -1,4 +1,4 @@
-/* ========== Global Reset ========== */ 
+/* ========== Global Reset ========== */
 * {
   margin: 0;
   padding: 0;
@@ -25,13 +25,13 @@ body {
   backdrop-filter: blur(8px);
 }
 
-.navbar img {
-  height: 40px;
+.navbar .logo {
+  height: 45px;
   filter: brightness(0) invert(1);
   transition: transform 0.3s ease;
 }
 
-.navbar img:hover {
+.navbar .logo:hover {
   transform: scale(1.05);
 }
 
@@ -58,6 +58,8 @@ body {
   border-radius: 5px;
   border: none;
   outline: none;
+  background: #222;
+  color: #fff;
 }
 
 /* ========== Banner ========== */
@@ -67,8 +69,7 @@ body {
   background-size: cover;
   background-position: center;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  align-items: flex-end;
   padding: 40px;
   color: white;
   transition: background-image 1s ease-in-out;
@@ -114,7 +115,7 @@ body {
 
 /* ========== Rows & Lists ========== */
 .row {
-  margin: 20px;
+  margin: 20px 30px;
 }
 
 .row h2 {
@@ -126,11 +127,21 @@ body {
   display: flex;
   overflow-x: auto;
   padding-bottom: 10px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: #e50914 transparent;
 }
 
 .list::-webkit-scrollbar {
-  display: none;
+  height: 8px;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: #e50914;
+  border-radius: 4px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .list img {
@@ -145,15 +156,6 @@ body {
   transform: scale(1.1);
   filter: brightness(1.2);
   z-index: 2;
-}
-
-.fade-in {
-  animation: fadeIn 0.8s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
 }
 
 /* ========== Modal ========== */
@@ -208,18 +210,19 @@ body {
   margin: 10px 0;
 }
 
-.list-btn {
+#add-to-list-btn {
   background: #e50914;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 5px;
-  color: white;
+  color: #fff;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: transform 0.2s ease, background 0.3s ease;
 }
 
-.list-btn:hover {
+#add-to-list-btn:hover {
   background: #f40612;
+  transform: scale(1.05);
 }
 
 .close {
@@ -237,11 +240,6 @@ body {
 }
 
 /* ========== Server Selector ========== */
-.server-selector {
-  margin: 15px 0;
-  text-align: left;
-}
-
 .server-selector select {
   background: #333;
   color: #fff;
@@ -256,7 +254,7 @@ body {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0,0,0,0.95);
   display: none;
   justify-content: center;
   align-items: center;
@@ -324,29 +322,6 @@ body {
   color: #fff;
 }
 
-/* ========== My List Page ========== */
-.list-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 15px;
-}
-
-.remove-btn {
-  margin-top: 8px;
-  padding: 6px 10px;
-  background: #444;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.remove-btn:hover {
-  background: #e50914;
-}
-
 /* ========== Responsive ========== */
 @media (max-width: 768px) {
   .banner {
@@ -377,6 +352,10 @@ body {
 
   .list img {
     width: 120px;
+  }
+
+  .navbar .logo {
+    height: 40px;
   }
 }
 
@@ -413,7 +392,7 @@ body {
     width: 100px;
   }
 
-  .navbar img {
-    height: 35px; /* smaller logo for mobile */
+  .navbar .logo {
+    height: 35px;
   }
 }
