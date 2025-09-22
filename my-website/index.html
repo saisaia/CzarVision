@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CzarVision</title>
+  <title>CzarVision - My List</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/home.css">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- JS -->
-  <script defer src="js/home.js"></script>
+  <script defer src="js/mylist.js"></script>
 </head>
 <body>
 
@@ -20,36 +20,16 @@
   <div class="navbar">
     <img src="czarvision-logo.png" alt="CzarVision Logo" />
     <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="mylist.html">My List</a>
+      <a href="index.html">Home</a>
+      <a href="mylist.html" class="active">My List</a>
       <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
     </div>
   </div>
 
-  <!-- Banner -->
-  <div class="banner" id="banner">
-    <h1 id="banner-title"></h1>
-    <p id="banner-overview"></p>
-    <div class="banner-buttons">
-      <button id="banner-play">Play</button>
-      <button id="banner-list">+ My List</button>
-    </div>
-  </div>
-
-  <!-- Trending Sections -->
+  <!-- My List Section -->
   <div class="row">
-    <h2>Trending Movies</h2>
-    <div class="list" id="movies-list"></div>
-  </div>
-
-  <div class="row">
-    <h2>Trending TV Shows</h2>
-    <div class="list" id="tvshows-list"></div>
-  </div>
-
-  <div class="row">
-    <h2>Trending Anime</h2>
-    <div class="list" id="anime-list"></div>
+    <h2>My List</h2>
+    <div class="list" id="mylist-container"></div>
   </div>
 
   <!-- Modal -->
