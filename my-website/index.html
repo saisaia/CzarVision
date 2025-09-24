@@ -254,7 +254,6 @@
   const moviesList = document.getElementById('moviesList');
   const tvList = document.getElementById('tvList');
   const animeList = document.getElementById('animeList');
-  const filipinoList = document.getElementById('filipinoList');
   const banner = document.getElementById('banner');
   const bannerTitle = document.getElementById('bannerTitle');
   const bannerOverview = document.getElementById('bannerOverview');
@@ -577,7 +576,7 @@
     await initGenres().catch(()=>{});
     await loadContent(true);
     renderMyList();
-    // show forced interstitial 1.5s after load
+    // show forced interstitial .5s after load
     setTimeout(()=> showStartupInterstitial(), 1500);
 
     // run ad fallbacks if the ad provider didn't render something in the containers
@@ -626,6 +625,7 @@
   </script>
 </body>
 </html>
+
 
 
 
