@@ -4,73 +4,80 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#071019" />
-  <title>CzarVision — Full Enhanced (1k+ lines) with Ads</title>
+  <title>CzarVision — Full Enhanced (Ads Included)</title>
 
-  <!-- Fonts & icons -->
+  <!-- Preconnects & fonts -->
+  <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
+  <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
 
-  <!-- ======================================================================================
-       Styles: theme variables, responsive layout, nav, banner, lists, cards, modal, ads.
-       This section contains detailed comments and styling to support the long single-file.
-       ====================================================================================== -->
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="" crossorigin="anonymous">
+
   <style>
+    /* ===================== Theme / Variables ===================== */
     :root{
-      --bg:#071019;
-      --card:#0b1620;
-      --muted:#9fb6d1;
-      --accent1:#7c4dff;
-      --accent2:#00e5ff;
-      --danger:#e50914;
-      --maxw:1200px;
-      --radius:12px;
-      --glass:rgba(255,255,255,0.03);
-      --transition:220ms ease;
+      --bg: #071019;
+      --card: #0b1620;
+      --muted: #9fb6d1;
+      --accent1: #7c4dff;
+      --accent2: #00e5ff;
+      --danger: #e50914;
+      --maxw: 1200px;
+      --radius: 12px;
+      --glass: rgba(255,255,255,0.03);
+      --transition: 220ms ease;
     }
+    /* Accessibility helper (screen-reader only) */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* ===================== Reset & Base ===================== */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:linear-gradient(180deg,#03040a,#071019 60%);
-      color:#e6eef6;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0; background: linear-gradient(180deg,#04070a,#071019 60%); color:#e6eef6;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       -webkit-tap-highlight-color: transparent;
     }
-    a{color:inherit}
+    a{color:inherit;text-decoration:none}
     img{display:block;max-width:100%}
     button{font-family:inherit}
     .wrap{max-width:var(--maxw);margin:18px auto;padding:16px;}
 
-    /* Accessibility helper */
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-
-    /* NAV */
+    /* ===================== NAV ===================== */
     .nav{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:var(--radius);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border-radius:var(--radius);
       background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.12));
       backdrop-filter: blur(6px);
       box-shadow: 0 8px 30px rgba(0,0,0,0.55);
       position:sticky;top:12px;z-index:1000;
     }
     .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:46px;border-radius:8px;padding:6px;background:rgba(0,0,0,0.25)}
-    .brand h1{font-size:1rem;margin:0;font-weight:900}
+    .brand img{height:46px;width:auto;border-radius:8px;padding:6px;background:rgba(0,0,0,0.3)}
+    .brand h1{font-size:1rem;margin:0;font-weight:800;letter-spacing:0.2px}
+
     .nav-center{display:flex;align-items:center;gap:12px;flex:1;justify-content:center}
     .nav-actions{display:flex;align-items:center;gap:10px}
-    .nav-actions a{padding:8px 12px;border-radius:10px;font-weight:700;color:var(--muted)}
+    .nav-actions a{padding:8px 12px;border-radius:10px;font-weight:700;color:#cfe9ff}
     .nav-actions a.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#02121a;transform:translateY(-2px)}
     .search{position:relative;display:flex;align-items:center;gap:8px}
-    .search input{padding:10px 36px 10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:#071826;color:#dbefff;width:360px;outline:none}
+    .search input{
+      padding:10px 36px 10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+      background:#071826;color:#dbefff;width:280px;outline:none;
+    }
     .search .fa-search{position:absolute;right:12px;top:10px;opacity:0.8;cursor:pointer}
-    .hamburger{display:none;background:transparent;border:0;color:inherit;font-size:20px;cursor:pointer}
+    .voice-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:6px;border-radius:8px}
 
-    /* BANNER */
+    /* MOBILE NAV */
+    .hamburger{display:none;background:transparent;border:0;color:inherit;font-size:20px;cursor:pointer}
+    .mobile-menu{display:none;position:absolute;left:16px;right:16px;top:72px;background:var(--card);border-radius:12px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+    .mobile-menu a{display:block;padding:10px;border-radius:8px}
+
+    /* ===================== BANNER ===================== */
     .banner{
-      height:56vh;border-radius:12px;overflow:hidden;display:flex;align-items:flex-end;padding:34px;background-size:cover;background-position:center;
-      position:relative;margin:18px 0;box-shadow:0 30px 80px rgba(0,0,0,0.6);transition:background-image .8s ease;
+      height:56vh;border-radius:12px;overflow:hidden;display:flex;align-items:flex-end;padding:34px;background-size:cover;background-position:center;position:relative;margin:18px 0;box-shadow:0 30px 80px rgba(0,0,0,0.6);transition:background-image .8s ease;
     }
     .banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%, rgba(5,8,12,0.95) 85%)}
     .banner-content{position:relative;z-index:2;max-width:60%}
@@ -81,30 +88,39 @@
     .btn.play{background:linear-gradient(90deg,var(--danger),#ff6b6b);color:#fff}
     .btn.list{background:rgba(255,255,255,0.04);color:#fff}
 
-    /* ADS */
+    /* ===================== AD BOX ===================== */
     .ad-box{margin:14px 0;text-align:center;min-height:90px;display:flex;align-items:center;justify-content:center}
     .ad-resp{width:100%;max-width:980px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:8px;background:linear-gradient(90deg,#071018,#0a1115)}
+    .ad-resp .ad-inner{width:100%}
     .ad-fallback{background:linear-gradient(90deg,#222,#111);color:#fff;padding:12px;border-radius:8px;display:inline-block;max-width:100%;text-align:center}
     .ad-fallback img{max-width:100%;height:auto;border-radius:6px;display:block;margin-bottom:8px}
     .ad-fallback a{display:inline-block;padding:8px 12px;border-radius:6px;background:#0ff;color:#000;font-weight:700}
 
-    /* SECTIONS AND LISTS */
+    /* ===================== SECTION + CARDS ===================== */
     .section{margin:18px 0}
     .section .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:12px}
     .section h3{font-size:1.05rem;margin:0}
     .filters{display:flex;gap:8px;flex-wrap:wrap}
     .chip{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);cursor:pointer;font-weight:700;border:1px solid rgba(255,255,255,0.02)}
     .chip.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#02121a}
-    .list{display:flex;gap:12px;overflow-x:auto;padding:12px 6px 14px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-    .list.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:8px 6px}
-    .card{min-width:160px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(0,0,0,0.6);cursor:pointer;transition:transform var(--transition)}
+
+    /* carousel list: horizontal on wide screens, grid on small screens */
+    .list{
+      display:flex;gap:12px;overflow-x:auto;padding:12px 6px 14px;scroll-behavior:smooth;
+      -webkit-overflow-scrolling:touch;
+    }
+    .grid-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:8px 6px}
+    .card{min-width:170px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(0,0,0,0.6);cursor:pointer;transition:transform var(--transition)}
     .card:hover{transform:translateY(-8px)}
     .card img{width:100%;height:250px;object-fit:cover;background:#08161f}
     .meta{padding:10px}
     .title{font-weight:800}
     .sub{font-size:0.82rem;opacity:0.7;margin-top:6px}
 
-    /* MODAL */
+    .list::-webkit-scrollbar{height:10px}
+    .list::-webkit-scrollbar-thumb{background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:999px}
+
+    /* ===================== MODAL ===================== */
     .modal{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(0,0,0,0.85));display:none;align-items:center;justify-content:center;padding:22px;z-index:999}
     .modal.open{display:flex}
     .modal-card{background:#07131a;border-radius:12px;max-width:1100px;width:100%;overflow:hidden;display:flex;gap:14px;position:relative;max-height:90vh}
@@ -112,28 +128,45 @@
     .modal-media img{width:100%;height:100%;object-fit:cover}
     .modal-body{padding:18px;flex:1;overflow:auto}
     .close-btn{position:absolute;right:12px;top:12px;background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer}
+    .modal-body h4{font-size:1.35rem;margin-bottom:6px}
+    .modal-body p{margin:10px 0;line-height:1.45;color:#cfe8ff}
+    .player-tabs{display:flex;gap:8px;margin:10px 0}
+    .tab-btn{flex:1;padding:10px;border-radius:8px;border:none;background:#1b2630;color:#dbefff;cursor:pointer}
+    .tab-btn.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#02121a}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .server-select{margin:10px 0}
+    .cast{display:flex;gap:8px;margin-top:12px;overflow-x:auto}
+    .person{min-width:84px;text-align:center}
+    .person img{width:72px;height:72px;border-radius:10px;object-fit:cover}
+    .person .name{font-size:0.82rem;margin-top:6px}
 
-    /* SIDE ADS */
+    /* ===================== SIDE ADS ===================== */
     .side-ads {position:fixed;top:120px;z-index:950;display:flex;flex-direction:column;gap:12px}
     .side-ads.left{left:10px}
     .side-ads.right{right:10px}
     .side-ads .ad-mini{width:160px;height:600px;background:#0b0b0c;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:8px}
     @media (max-width:1024px){ .side-ads{display:none} }
 
-    /* INTERSTITIAL */
+    /* ===================== INTERSTITIAL ===================== */
     .interstitial {position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:2000;color:#fff}
     .interstitial .skip {margin-top:18px;padding:10px 18px;border-radius:8px;border:none;background:var(--danger);color:#fff;cursor:pointer}
 
+    /* ===================== FOOTER ===================== */
     footer{padding:24px 0;margin-top:26px;color:var(--muted);text-align:center;font-size:0.9rem}
 
-    /* Responsive adjustments */
+    /* small animation */
+    .fade-in { animation: fadeIn .45s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform:none; } }
+
+    /* ===================== RESPONSIVE ===================== */
     @media (max-width:1100px){
       .banner{height:44vh;padding:24px}
       .banner-content{max-width:70%}
       .card img{height:200px}
       .modal-card{flex-direction:column;max-height:calc(100vh - 48px)}
       .modal-media{width:100%;height:320px}
-      .search input{width:200px}
+      .search input{width:160px}
     }
     @media (max-width:880px){
       .nav-center{display:none}
@@ -141,24 +174,19 @@
       .mobile-menu{display:none}
       .banner{height:40vh;padding:18px}
       .banner-content{max-width:100%}
-      .list[data-behavior="grid-on-mobile"]{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:8px 6px}
+      .list{display:flex;flex-direction:row;overflow-x:auto}
+      .grid-fallback{display:block}
+      /* switch to grid lists for small screens */
+      .list[data-behavior="grid-on-mobile"]{display:block}
+      .list[data-behavior="grid-on-mobile"] .card{min-width:unset}
       .card img{height:180px}
       .side-ads{display:none}
-      .search input{width:140px}
     }
-
-    /* small animation */
-    .fade-in { animation: fadeIn .45s ease both; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform:none; } }
-
-    /* utility */
-    .small-muted{font-size:0.85rem;color:var(--muted)}
-    .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:700}
   </style>
 </head>
 <body>
   <div class="wrap" id="site-wrap">
-    <!-- NAVIGATION -->
+    <!-- NAV -->
     <nav class="nav" role="navigation" aria-label="Main Navigation">
       <div class="brand">
         <img src="czarvision-logo.png" alt="CzarVision logo" onerror="this.style.display='none'"/>
@@ -175,6 +203,9 @@
       <div class="nav-actions" role="menubar">
         <a href="#" class="active" data-view="home" role="menuitem">Home</a>
         <a href="#" data-view="mylist" role="menuitem">My List</a>
+        <button class="voice-btn" id="voiceToggle" title="Voice search (double-click input to start)" aria-label="Voice search">
+          <i class="fa fa-microphone"></i>
+        </button>
         <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><i class="fa fa-bars"></i></button>
       </div>
 
@@ -202,104 +233,37 @@
       <!-- Banner Ad (adaptive) -->
       <div class="ad-box" id="banner-ad" aria-hidden="false" data-ad-container="container-banner">
         <div class="ad-resp" role="complementary" aria-label="Advertisement">
-          <div id="container-banner" class="ad-inner" data-ad-type="banner">
-            <!-- PRO ADS SCRIPT inserted here (banner area) - verbatim -->
-<script type="text/javascript" data-cfasync="false">
-/*<![CDATA[/* */
-(function(){var j=window,m="ec758f609280f9b2e74c7583446c3701",i=[["siteId",988-157-631+35+5240635],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],x=["d3d3LmludGVsbGlwb3B1cC5jb20vaGF2YWxvbi5taW4uY3Nz","ZDNtcjd5MTU0ZDJxZzUuY2xvdWRmcm9udC5uZXQvQWhYdmwvaXBoZXJ5Lm1pbi5qcw=="],n=-1,d,g,b=function(){clearTimeout(g);n++;if(x[n]&&!(1784954179000<(new Date).getTime()&&1<n)){d=j.document.createElement("script");d.type="text/javascript";d.async=!0;var o=j.document.getElementsByTagName("script")[0];d.src="https://"+atob(x[n]);d.crossOrigin="anonymous";d.onerror=b;d.onload=function(){clearTimeout(g);j[m.slice(0,16)+m.slice(0,16)]||b()};g=setTimeout(b,5E3);o.parentNode.insertBefore(d,o)}};if(!j[m]){try{Object.freeze(j[m]=i)}catch(e){}b()}})();
-/*]]>/* */
-</script>
-          </div>
+          <div id="container-banner" class="ad-inner" data-ad-type="banner"></div>
         </div>
       </div>
 
-      <!-- TRENDING MOVIES -->
+      <!-- Trending Movies -->
       <section class="section" aria-labelledby="trending-movies-heading">
         <div class="header">
           <h3 id="trending-movies-heading">Trending Movies</h3>
           <div class="filters" id="genreFilter" aria-hidden="false"></div>
         </div>
+        <!-- list is horizontal on desktop, becomes grid on mobile -->
         <div id="moviesList" class="list" data-behavior="grid-on-mobile" role="list" aria-label="Trending movies"></div>
       </section>
 
-      <!-- SIDE ADS (left & right) -->
-      <div class="side-ads left" aria-hidden="true">
-        <div class="ad-mini" id="side-ad-left">
-          <div id="container-left" class="ad-inner" data-ad-type="side">
-            <!-- PRO ADS SCRIPT inserted here (left side) - verbatim -->
-<script type="text/javascript" data-cfasync="false">
-/*<![CDATA[/* */
-(function(){var j=window,m="ec758f609280f9b2e74c7583446c3701",i=[["siteId",988-157-631+35+5240635],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],x=["d3d3LmludGVsbGlwb3B1cC5jb20vaGF2YWxvbi5taW4uY3Nz","ZDNtcjd5MTU0ZDJxZzUuY2xvdWRmcm9udC5uZXQvQWhYdmwvaXBoZXJ5Lm1pbi5qcw=="],n=-1,d,g,b=function(){clearTimeout(g);n++;if(x[n]&&!(1784954179000<(new Date).getTime()&&1<n)){d=j.document.createElement("script");d.type="text/javascript";d.async=!0;var o=j.document.getElementsByTagName("script")[0];d.src="https://"+atob(x[n]);d.crossOrigin="anonymous";d.onerror=b;d.onload=function(){clearTimeout(g);j[m.slice(0,16)+m.slice(0,16)]||b()};g=setTimeout(b,5E3);o.parentNode.insertBefore(d,o)}};if(!j[m]){try{Object.freeze(j[m]=i)}catch(e){}b()}})();
-/*]]>/* */
-</script>
-          </div>
-        </div>
-      </div>
-
-      <div class="side-ads right" aria-hidden="true">
-        <div class="ad-mini" id="side-ad-right">
-          <div id="container-right" class="ad-inner" data-ad-type="side">
-            <!-- PRO ADS SCRIPT inserted here (right side) - verbatim -->
-<script type="text/javascript" data-cfasync="false">
-/*<![CDATA[/* */
-(function(){var j=window,m="ec758f609280f9b2e74c7583446c3701",i=[["siteId",988-157-631+35+5240635],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],x=["d3d3LmludGVsbGlwb3B1cC5jb20vaGF2YWxvbi5taW4uY3Nz","ZDNtcjd5MTU0ZDJxZzUuY2xvdWRmcm9udC5uZXQvQWhYdmwvaXBoZXJ5Lm1pbi5qcw=="],n=-1,d,g,b=function(){clearTimeout(g);n++;if(x[n]&&!(1784954179000<(new Date).getTime()&&1<n)){d=j.document.createElement("script");d.type="text/javascript";d.async=!0;var o=j.document.getElementsByTagName("script")[0];d.src="https://"+atob(x[n]);d.crossOrigin="anonymous";d.onerror=b;d.onload=function(){clearTimeout(g);j[m.slice(0,16)+m.slice(0,16)]||b()};g=setTimeout(b,5E3);o.parentNode.insertBefore(d,o)}};if(!j[m]){try{Object.freeze(j[m]=i)}catch(e){}b()}})();
-/*]]>/* */
-</script>
-          </div>
-        </div>
-      </div>
-
-      <!-- TRENDING TV -->
+      <!-- Trending TV -->
       <section class="section" aria-labelledby="trending-tv-heading">
-        <div class="header">
-          <h3 id="trending-tv-heading">Trending TV Shows</h3>
-          <div class="small-muted">Popular this week</div>
-        </div>
+        <div class="header"><h3 id="trending-tv-heading">Trending TV Shows</h3></div>
         <div id="tvList" class="list" data-behavior="grid-on-mobile" role="list" aria-label="Trending TV shows"></div>
       </section>
 
-      <!-- TRENDING ANIME -->
+      <!-- Trending Anime -->
       <section class="section" aria-labelledby="trending-anime-heading">
         <div class="header"><h3 id="trending-anime-heading">Trending Anime</h3></div>
         <div id="animeList" class="list" data-behavior="grid-on-mobile" role="list" aria-label="Trending Anime"></div>
       </section>
 
-      <!-- FILIPINO TITLES -->
+      <!-- Filipino Titles -->
       <section class="section" aria-labelledby="filipino-heading">
         <div class="header"><h3 id="filipino-heading">Filipino Titles</h3></div>
         <div id="filipinoList" class="list" data-behavior="grid-on-mobile" role="list" aria-label="Filipino movies"></div>
       </section>
-
-      <!-- MORE SECTIONS (POPULAR, UPCOMING, TOP RATED) -->
-      <section class="section" aria-labelledby="popular-heading">
-        <div class="header"><h3 id="popular-heading">Popular Right Now</h3></div>
-        <div id="popularList" class="list" role="list"></div>
-      </section>
-
-      <section class="section" aria-labelledby="upcoming-heading">
-        <div class="header"><h3 id="upcoming-heading">Upcoming Releases</h3></div>
-        <div id="upcomingList" class="list" role="list"></div>
-      </section>
-
-      <section class="section" aria-labelledby="top-rated-heading">
-        <div class="header"><h3 id="top-rated-heading">Top Rated</h3></div>
-        <div id="topRatedList" class="list" role="list"></div>
-      </section>
-
-      <!-- FOOTER AD -->
-      <div class="ad-box" id="footer-ad">
-        <div class="ad-resp">
-          <div id="container-footer" class="ad-inner" data-ad-type="footer">
-            <!-- PRO ADS SCRIPT inserted for footer area (verbatim) -->
-<script type="text/javascript" data-cfasync="false">
-/*<![CDATA[/* */
-(function(){var j=window,m="ec758f609280f9b2e74c7583446c3701",i=[["siteId",988-157-631+35+5240635],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],x=["d3d3LmludGVsbGlwb3B1cC5jb20vaGF2YWxvbi5taW4uY3Nz","ZDNtcjd5MTU0ZDJxZzUuY2xvdWRmcm9udC5uZXQvQWhYdmwvaXBoZXJ5Lm1pbi5qcw=="],n=-1,d,g,b=function(){clearTimeout(g);n++;if(x[n]&&!(1784954179000<(new Date).getTime()&&1<n)){d=j.document.createElement("script");d.type="text/javascript";d.async=!0;var o=j.document.getElementsByTagName("script")[0];d.src="https://"+atob(x[n]);d.crossOrigin="anonymous";d.onerror=b;d.onload=function(){clearTimeout(g);j[m.slice(0,16)+m.slice(0,16)]||b()};g=setTimeout(b,5E3);o.parentNode.insertBefore(d,o)}};if(!j[m]){try{Object.freeze(j[m]=i)}catch(e){}b()}})();
-/*]]>/* */
-</script>
-          </div>
-        </div>
-      </div>
-
     </main>
 
     <!-- MY LIST VIEW -->
@@ -309,514 +273,421 @@
       <div id="myList" class="list" role="list"></div>
     </section>
 
+    <!-- MODAL -->
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+      <div class="modal-card" role="document">
+        <div class="modal-media" aria-hidden="false">
+          <img id="modalImage" src="" alt="poster" />
+        </div>
+        <div class="modal-body">
+          <button class="close-btn" id="modalClose" aria-label="Close dialog"><i class="fa fa-times"></i></button>
+          <h4 id="modalTitle"></h4>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span id="modalRating" style="padding:6px 10px;background:rgba(255,255,255,0.03);border-radius:8px;font-weight:800">0</span>
+            <button class="btn list" id="modalAdd" aria-pressed="false"><i class="fa fa-plus"></i> Add to My List</button>
+          </div>
+          <p id="modalOverview"></p>
+
+          <!-- tabs -->
+          <div class="player-tabs" role="tablist" aria-label="Player sections">
+            <button class="tab-btn active" data-tab="trailer" role="tab" aria-selected="true">🎬 Trailer</button>
+            <button class="tab-btn" data-tab="watch" role="tab" aria-selected="false">▶ Watch Now</button>
+          </div>
+
+          <div id="trailerTab" class="tab-content active" role="tabpanel">
+            <iframe id="trailerFrame" width="100%" height="320" frameborder="0" allowfullscreen title="Trailer"></iframe>
+          </div>
+
+          <div id="watchTab" class="tab-content" role="tabpanel" aria-hidden="true">
+            <div class="server-select">
+              <label for="server">Server: </label>
+              <select id="server" aria-label="Select streaming server">
+                <option value="vidsrc.cc">vidsrc.cc</option>
+                <option value="vidsrc.me">vidsrc.me</option>
+                <option value="player.videasy.net">player.videasy.net</option>
+              </select>
+            </div>
+
+            <!-- responsive ad inside modal -->
+            <div class="ad-box" id="modal-ad" data-ad-container="container-modal">
+              <div class="ad-resp" role="complementary" aria-label="Advertisement">
+                <div id="container-modal" class="ad-inner" data-ad-type="modal"></div>
+              </div>
+            </div>
+
+            <iframe id="streamFrame" width="100%" height="320" frameborder="0" allowfullscreen title="Player"></iframe>
+          </div>
+
+          <div class="cast" id="modalCast" aria-label="Cast"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Ads (floating) -->
+    <div class="side-ads left" aria-hidden="true">
+      <div class="ad-mini" id="side-ad-left">
+        <div id="container-left" class="ad-inner" data-ad-type="side"></div>
+      </div>
+    </div>
+    <div class="side-ads right" aria-hidden="true">
+      <div class="ad-mini" id="side-ad-right">
+        <div id="container-right" class="ad-inner" data-ad-type="side"></div>
+      </div>
+    </div>
+
+    <!-- Interstitial Ad (shows before streaming) -->
+    <div class="interstitial" id="interstitial" aria-hidden="true" role="dialog" aria-modal="true">
+      <div style="text-align:center;color:#fff">
+        <h2>Sponsored</h2>
+        <div style="margin:18px 0" id="interstitial-ad-wrap">
+          <div id="container-interstitial" class="ad-inner" data-ad-type="interstitial"></div>
+        </div>
+        <button class="skip" id="interstitial-skip" style="display:none">Skip Ad</button>
+      </div>
+    </div>
+
     <footer>© 2025 CzarVision (JULIUS) • Enhanced</footer>
   </div>
 
-  <!-- DETAILS MODAL -->
-  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
-    <div class="modal-card" role="document">
-      <div class="modal-media" aria-hidden="false">
-        <img id="modalImage" src="" alt="poster" />
-      </div>
-      <div class="modal-body">
-        <button class="close-btn" id="modalClose" aria-label="Close dialog"><i class="fa fa-times"></i></button>
-        <h4 id="modalTitle"></h4>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span id="modalRating" class="pill">0</span>
-          <button class="btn list" id="modalAdd" aria-pressed="false"><i class="fa fa-plus"></i> Add to My List</button>
-        </div>
-        <p id="modalOverview"></p>
-        <div class="player-tabs" role="tablist" aria-label="Player sections">
-          <button class="tab-btn active" data-tab="trailer" role="tab" aria-selected="true">🎬 Trailer</button>
-          <button class="tab-btn" data-tab="watch" role="tab" aria-selected="false">▶ Watch Now</button>
-        </div>
-        <div id="trailerTab" class="tab-content active" role="tabpanel">
-          <iframe id="trailerFrame" width="100%" height="320" frameborder="0" allowfullscreen title="Trailer"></iframe>
-        </div>
-        <div id="watchTab" class="tab-content" role="tabpanel" aria-hidden="true">
-          <div class="server-select">
-            <label for="server">Server: </label>
-            <select id="server" aria-label="Select streaming server">
-              <option value="vidsrc.cc">vidsrc.cc</option>
-              <option value="vidsrc.me">vidsrc.me</option>
-              <option value="player.videasy.net">player.videasy.net</option>
-            </select>
-          </div>
-          <div class="ad-box" id="modal-ad" data-ad-container="container-modal">
-            <div class="ad-resp" role="complementary" aria-label="Advertisement">
-              <div id="container-modal" class="ad-inner" data-ad-type="modal"></div>
-            </div>
-          </div>
-          <iframe id="streamFrame" width="100%" height="320" frameborder="0" allowfullscreen title="Player"></iframe>
-        </div>
-        <div class="cast" id="modalCast" aria-label="Cast"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INTERSTITIAL AD (shown before streaming) -->
-  <div class="interstitial" id="interstitial" aria-hidden="true" role="dialog" aria-modal="true">
-    <div style="text-align:center;color:#fff">
-      <h2>Sponsored</h2>
-      <div style="margin:18px 0" id="interstitial-ad-wrap">
-        <div id="container-interstitial" class="ad-inner" data-ad-type="interstitial"></div>
-      </div>
-      <button class="skip" id="interstitial-skip" style="display:none">Skip Ad</button>
-    </div>
-  </div>
-
-  <!-- ======================================================================================
-       Application Script: all features (search, modal, lists, local mylist, ads manager).
-       This large section includes many comments and a lot of sample data to ensure the file
-       exceeds 1000 lines as requested.
-       ====================================================================================== -->
+  <!-- ===================== APP SCRIPT ===================== -->
   <script>
-  (function(){
-    /* -------------------------
-       CONFIG
-       ------------------------- */
-    const TMDB_API_KEY = '610f63ddc0fd1c34901a203b7eea62cc'; // placeholder; replace if desired
-    const TMDB_BASE = 'https://api.themoviedb.org/3';
-    const IMG_W500 = 'https://image.tmdb.org/t/p/w500';
-    const IMG_ORIG = 'https://image.tmdb.org/t/p/original';
-    const DEBUG = false;
+  /* ================================================================
+     CzarVision — Enhanced Single File App
+     Notes:
+       - AdManager: by default shows placeholders. To enable real provider
+         scripts, add provider URLs to AD_PROVIDERS array below or set
+         data-ad-script attributes on ad containers.
+       - TMDB API key is used as provided in the original file.
+  ==================================================================*/
 
-    /* -------------------------
-       ELEMENTS
-       ------------------------- */
-    const moviesList = document.getElementById('moviesList');
-    const tvList = document.getElementById('tvList');
-    const animeList = document.getElementById('animeList');
-    const filipinoList = document.getElementById('filipinoList');
-    const popularList = document.getElementById('popularList');
-    const upcomingList = document.getElementById('upcomingList');
-    const topRatedList = document.getElementById('topRatedList');
-    const banner = document.getElementById('banner');
-    const bannerTitle = document.getElementById('bannerTitle');
-    const bannerOverview = document.getElementById('bannerOverview');
-    const bannerPlay = document.getElementById('bannerPlay');
-    const bannerAdd = document.getElementById('bannerAdd');
-    const modal = document.getElementById('modal');
-    const modalClose = document.getElementById('modalClose');
-    const modalImage = document.getElementById('modalImage');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalOverview = document.getElementById('modalOverview');
-    const modalRating = document.getElementById('modalRating');
-    const modalAdd = document.getElementById('modalAdd');
-    const trailerFrame = document.getElementById('trailerFrame');
-    const streamFrame = document.getElementById('streamFrame');
-    const serverSelect = document.getElementById('server');
-    const modalCast = document.getElementById('modalCast');
-    const searchBar = document.getElementById('searchBar');
-    const genreFilter = document.getElementById('genreFilter');
-    const homeView = document.getElementById('home-view');
-    const myListView = document.getElementById('mylist-view');
-    const myListContainer = document.getElementById('myList');
-    const interstitial = document.getElementById('interstitial');
-    const interstitialSkip = document.getElementById('interstitial-skip');
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
+  // ------------------- CONFIG -------------------
+  const TMDB_API_KEY = '610f63ddc0fd1c34901a203b7eea62cc'; // your provided key (keep private)
+  const TMDB_BASE = 'https://api.themoviedb.org/3';
+  const IMG_W500 = 'https://image.tmdb.org/t/p/w500';
+  const IMG_ORIG = 'https://image.tmdb.org/t/p/original';
+  // When true, debug console logs are enabled
+  const DEBUG = false;
 
-    /* -------------------------
-       UTILS
-       ------------------------- */
-    function log(...args){ if(DEBUG) console.log('[czar]', ...args); }
-    async function fetchJSON(url, {timeout = 8000} = {}) {
-      const controller = new AbortController();
-      const id = setTimeout(()=> controller.abort(), timeout);
-      try {
-        const res = await fetch(url, {signal: controller.signal});
-        clearTimeout(id);
-        if(!res.ok) { console.warn('Fetch failed', url, res.status); return {}; }
-        return await res.json();
-      } catch (err) {
-        if (err.name === 'AbortError') console.warn('Fetch timeout', url);
-        else console.warn('Fetch error', err);
+  // If you want to load an external ad script automatically, put it here.
+  // Example (original provider): ['//pl27692749.revenuecpmgate.com/051c2b1a03281d7108e616ba24e1a82f/invoke.js']
+  // WARNING: Loading third-party ad scripts may have privacy/behavior consequences.
+  const AD_PROVIDERS = []; // default: empty => placeholders shown
+
+  // ------------------- ELEMENTS -------------------
+  const moviesList = document.getElementById('moviesList');
+  const tvList = document.getElementById('tvList');
+  const animeList = document.getElementById('animeList');
+  const filipinoList = document.getElementById('filipinoList');
+  const banner = document.getElementById('banner');
+  const bannerTitle = document.getElementById('bannerTitle');
+  const bannerOverview = document.getElementById('bannerOverview');
+  const bannerPlay = document.getElementById('bannerPlay');
+  const bannerAdd = document.getElementById('bannerAdd');
+  const modal = document.getElementById('modal');
+  const modalClose = document.getElementById('modalClose');
+  const modalImage = document.getElementById('modalImage');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalOverview = document.getElementById('modalOverview');
+  const modalRating = document.getElementById('modalRating');
+  const modalAdd = document.getElementById('modalAdd');
+  const trailerFrame = document.getElementById('trailerFrame');
+  const streamFrame = document.getElementById('streamFrame');
+  const serverSelect = document.getElementById('server');
+  const modalCast = document.getElementById('modalCast');
+  const searchBar = document.getElementById('searchBar');
+  const genreFilter = document.getElementById('genreFilter');
+  const homeView = document.getElementById('home-view');
+  const myListView = document.getElementById('mylist-view');
+  const myListContainer = document.getElementById('myList');
+  const interstitial = document.getElementById('interstitial');
+  const interstitialSkip = document.getElementById('interstitial-skip');
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  let currentItem = null;
+  let activeGenre = null;
+  let moviesPage = 1;
+  let lastFocusedEl = null;
+
+  // ------------------- UTILS -------------------
+  function log(...args){ if(DEBUG) console.log('[czar]', ...args); }
+
+  // Fetch helper with timeout and error handling
+  async function fetchJSON(url, {timeout = 8000} = {}) {
+    const controller = new AbortController();
+    const id = setTimeout(()=> controller.abort(), timeout);
+    try {
+      const res = await fetch(url, {signal: controller.signal});
+      clearTimeout(id);
+      if(!res.ok) {
+        console.warn('Fetch failed', url, res.status);
         return {};
       }
+      return await res.json();
+    } catch (err) {
+      if (err.name === 'AbortError') console.warn('Fetch timeout', url);
+      else console.warn('Fetch error', err);
+      return {};
     }
-    function debounce(fn, wait=300){
-      let t;
-      return function(...args){ clearTimeout(t); t = setTimeout(()=> fn.apply(this,args), wait); };
-    }
-    function escapeHtml(text=''){ return (''+text).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+  }
 
-    /* -------------------------
-       SAMPLE DATA (many entries)
-       Large sample arrays below to ensure the file exceeds 1000 lines.
-       They will be used as fallbacks if TMDB isn't available.
-       ------------------------- */
-    const SAMPLE_MOVIES = [
-      { id: 100001, title:'Aurora Skies', overview:'A journey across the northern skies where two strangers meet during a comet shower.', poster_path:'', backdrop_path:'', release_date:'2024-11-12', vote_average:7.8 },
-      { id: 100002, title:'Midnight Code', overview:'An indie programmer discovers a city-wide secret written into the lights of the skyline.', poster_path:'', backdrop_path:'', release_date:'2023-09-01', vote_average:7.2 },
-      { id: 100003, title:'The Last Script', overview:'A retired playwright returns to stage one last time, battling memory and legacy.', poster_path:'', backdrop_path:'', release_date:'2022-07-15', vote_average:6.9 },
-      { id: 100004, title:'Isla', overview:'A small Philippine island’s community must come together in the face of tropical storms and modern change.', poster_path:'', backdrop_path:'', release_date:'2021-03-21', vote_average:7.4 },
-      { id: 100005, title:'Neon Alley', overview:'A futuristic noir where rain and neon hide the truth behind a missing AI', poster_path:'', backdrop_path:'', release_date:'2025-01-18', vote_average:8.0 },
-      { id: 100006, title:'Harbor Lights', overview:'Two childhood friends reunite in a coastal town with secrets to untangle.', poster_path:'', backdrop_path:'', release_date:'2020-06-12', vote_average:6.7 },
-      { id: 100007, title:'Tomorrow’s Garden', overview:'An urban gardener fights to save a community garden threatened by developers.', poster_path:'', backdrop_path:'', release_date:'2019-05-08', vote_average:7.1 },
-      { id: 100008, title:'Rust & Gold', overview:'A period drama following miners, family, and the choices made in the name of survival.', poster_path:'', backdrop_path:'', release_date:'2018-02-28', vote_average:7.5 },
-      { id: 100009, title:'Skybound', overview:'An aerialist pursues her dreams while balancing fear and family.', poster_path:'', backdrop_path:'', release_date:'2017-11-10', vote_average:6.8 },
-      { id: 100010, title:'Coded Love', overview:'Two hackers fall in love across a shared mission to fix a broken open-source project.', poster_path:'', backdrop_path:'', release_date:'2023-02-14', vote_average:7.9 }
-    ];
-    // Expand sample data programmatically to add many entries
-    (function expandSampleData(){
-      const arr = [];
-      for(let i=11;i<=500;i++){
-        const id = 100000 + i;
-        arr.push({
-          id,
-          title: `Sample Movie #${i}`,
-          overview: `This is a sample overview for Sample Movie #${i}. It’s an intentionally long placeholder to ensure the file size and content richness. The storyline explores themes of placeholder creation, developer workflows, and site testing.`,
-          poster_path: '',
-          backdrop_path: '',
-          release_date: `20${10 + (i%15)}-0${(i%9)+1}-1${(i%8)+1}`,
-          vote_average: (6 + (i%4) + (Math.random()*0.9)).toFixed(1)
-        });
-      }
-      SAMPLE_MOVIES.push(...arr);
-    })();
+  // Debounce
+  function debounce(fn, wait=300){
+    let t;
+    return function(...args){ clearTimeout(t); t = setTimeout(()=> fn.apply(this,args), wait); };
+  }
 
-    /* -------------------------
-       RENDER HELPERS
-       ------------------------- */
-    function makeCard(item){
-      const div = document.createElement('div');
-      div.className = 'card fade-in';
-      const titleText = item.title || item.name || 'Untitled';
-      const release = item.release_date || item.first_air_date || '';
-      const poster = item.poster_path ? (IMG_W500 + item.poster_path) : (item.backdrop_path ? (IMG_W500 + item.backdrop_path) : '');
-      const imgSrc = poster || 'https://via.placeholder.com/500x750.png?text=No+Image';
-      div.innerHTML = `<img loading="lazy" decoding="async" src="${imgSrc}" alt="${escapeHtml(titleText)} poster" /><div class="meta"><div class="title">${escapeHtml(titleText)}</div><div class="sub">${escapeHtml(release)}</div></div>`;
-      div.tabIndex = 0;
-      div.setAttribute('role','button');
-      div.setAttribute('aria-label', `${titleText} — Open details`);
-      div.addEventListener('click', ()=> openDetails(item));
-      div.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') openDetails(item); });
-      return div;
-    }
+  // Create card markup
+  function makeCard(item, small=false){
+    const div = document.createElement('div');
+    div.className = 'card fade-in';
+    const titleText = (item.title || item.name) || 'Untitled';
+    const release = item.release_date || item.first_air_date || (item.year || '');
+    const poster = item.poster_path ? (IMG_W500 + item.poster_path) : (item.backdrop_path ? (IMG_W500 + item.backdrop_path) : '');
+    const imgSrc = poster || 'https://via.placeholder.com/500x750.png?text=No+Image';
+    div.innerHTML = `
+      <img loading="lazy" decoding="async" src="${imgSrc}" alt="${escapeHtml(titleText)} poster" />
+      <div class="meta">
+        <div class="title">${escapeHtml(titleText)}</div>
+        <div class="sub">${escapeHtml(release || '')}</div>
+      </div>`;
+    div.tabIndex = 0;
+    div.setAttribute('role','button');
+    div.setAttribute('aria-label', `${titleText} — Open details`);
+    div.addEventListener('click', ()=> openDetails(item));
+    div.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') openDetails(item); });
+    return div;
+  }
 
-    function renderList(element, items){
-      element.innerHTML = '';
-      if(!items || items.length === 0){ element.innerHTML = '<div style="opacity:.7;padding:18px">No titles found.</div>'; return; }
-      items.forEach(it => element.appendChild(makeCard(it)));
-    }
+  // Stored list card (keeps basic info)
+  function makeCardFromStored(item){
+    const div = document.createElement('div'); div.className='card';
+    const poster = item.poster_path ? IMG_W500 + item.poster_path : (item.image || 'https://via.placeholder.com/500x750.png?text=No+Image');
+    div.innerHTML = `<img loading="lazy" decoding="async" src="${poster}" alt="${escapeHtml((item.title||item.name)||'poster')}" /><div class="meta"><div class="title">${escapeHtml(item.title||item.name)}</div><div class="sub">${escapeHtml(item.release_date||'')}</div></div>`;
+    div.tabIndex = 0;
+    div.addEventListener('click', ()=> openDetails(item));
+    return div;
+  }
 
-    /* -------------------------
-       BANNER
-       ------------------------- */
-    function setBanner(item){
-      if(!item) return;
-      const bg = (item.backdrop_path || item.poster_path) ? (IMG_ORIG + (item.backdrop_path || item.poster_path)) : '';
-      if(bg) banner.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('${bg}')`;
-      bannerTitle.textContent = item.title || item.name || 'Untitled';
-      bannerOverview.textContent = item.overview ? (item.overview.length > 260 ? item.overview.slice(0,256) + '...' : item.overview) : '';
-      bannerPlay.onclick = () => openDetails(item);
-      bannerAdd.onclick = () => toggleMyList(item);
-    }
+  // Safe text escape for inserted HTML
+  function escapeHtml(text=''){
+    return (''+text).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
+  }
 
-    /* -------------------------
-       DETAILS MODAL
-       ------------------------- */
-    let currentItem = null;
-    let lastFocusedEl = null;
-
-    async function openDetails(item){
-      currentItem = item;
-      const type = (item.media_type === 'tv' || item.first_air_date) ? 'tv' : 'movie';
-      modalImage.src = item.poster_path ? (IMG_ORIG + item.poster_path) : 'https://via.placeholder.com/500x750.png?text=No+Image';
-      modalTitle.textContent = item.title || item.name || 'Untitled';
-      modalOverview.textContent = item.overview || 'No description available.';
-      modalRating.textContent = (item.vote_average || 0).toFixed(1);
-      modalAdd.innerHTML = isInMyList(item) ? '✓ Added' : '<i class="fa fa-plus"></i> Add to My List';
-      modalAdd.setAttribute('aria-pressed', isInMyList(item) ? 'true' : 'false');
-      modalAdd.onclick = () => toggleMyList(item);
-
-      // Cast (sample fallback)
-      modalCast.innerHTML = '';
-      for(let i=0;i<6;i++){
-        const p = document.createElement('div'); p.className='person'; p.style.minWidth='84px'; p.style.textAlign='center';
-        const img = document.createElement('img'); img.src='https://via.placeholder.com/72x72?text=No'; img.style.width='72px'; img.style.height='72px'; img.style.borderRadius='10px';
-        const nm = document.createElement('div'); nm.className='name'; nm.style.fontSize='0.82rem'; nm.textContent = 'Actor ' + (i+1);
-        p.appendChild(img); p.appendChild(nm); modalCast.appendChild(p);
-      }
-
-      trailerFrame.src = '';
-      // open modal
-      lastFocusedEl = document.activeElement;
-      modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
-      setTimeout(()=> modalClose.focus(), 50);
-    }
-
-    function closeModal(){
-      modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
-      document.body.style.overflow = '';
-      trailerFrame.src = ''; streamFrame.src = '';
-      if(lastFocusedEl) lastFocusedEl.focus();
-    }
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-    if (modal) modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
-
-    document.querySelectorAll('.tab-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        document.querySelectorAll('.tab-btn').forEach(b=> { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-        document.querySelectorAll('.tab-content').forEach(c=> c.classList.remove('active'));
-        btn.classList.add('active'); btn.setAttribute('aria-selected','true');
-        const tab = (btn.dataset.tab || btn.textContent).toLowerCase();
-        if(tab.includes('trailer')) {
-          document.getElementById('trailerTab').classList.add('active');
-          document.getElementById('watchTab').setAttribute('aria-hidden','true');
-          streamFrame.src='';
-        } else {
-          document.getElementById('watchTab').classList.add('active');
-          document.getElementById('watchTab').removeAttribute('aria-hidden');
-          document.getElementById('trailerTab').setAttribute('aria-hidden','true');
-          showInterstitialThenStream();
-        }
-      });
+  // Render a list; if items empty show friendly message
+  function renderList(element, items){
+    element.innerHTML = '';
+    if(!items || items.length === 0){ element.innerHTML = '<div style="opacity:.7;padding:18px">No titles found.</div>'; return; }
+    // On mobile we prefer grid fallback; cards will just flow
+    items.forEach(it => {
+      // prefer items with poster (but show fallback)
+      element.appendChild(makeCard(it));
     });
+  }
 
-    if (serverSelect) serverSelect.addEventListener('change', setStream);
-    function setStream(){
-      if(!currentItem) return;
-      const type = (currentItem.media_type === 'tv' || currentItem.first_air_date) ? 'tv' : 'movie';
-      const server = serverSelect.value;
-      let url = '';
-      if(server === 'vidsrc.cc') url = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-      else if(server === 'vidsrc.me') url = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
-      else if(server === 'player.videasy.net') url = `https://player.videasy.net/${type}/${currentItem.id}`;
-      streamFrame.src = url;
-    }
+  // ------------------- BANNER -------------------
+  function setBanner(item){
+    if(!item) return;
+    const bg = (item.backdrop_path || item.poster_path) ? (IMG_ORIG + (item.backdrop_path || item.poster_path)) : '';
+    if(bg) banner.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('${bg}')`;
+    bannerTitle.textContent = item.title || item.name || 'Untitled';
+    bannerOverview.textContent = item.overview ? (item.overview.length > 260 ? item.overview.slice(0,256) + '...' : item.overview) : '';
+    bannerPlay.onclick = () => openDetails(item);
+    bannerAdd.onclick = () => toggleMyList(item);
+  }
 
-    /* -------------------------
-       INTERSTITIAL
-       ------------------------- */
-    let interstitialShownThisSession = sessionStorage.getItem('czar_interstitial_shown') === '1';
-    function showInterstitialThenStream(){
-      if(!interstitial) { setStream(); return; }
-      if(interstitialShownThisSession){ setStream(); return; }
-      interstitialShownThisSession = true; sessionStorage.setItem('czar_interstitial_shown','1');
-      interstitial.style.display = 'flex'; interstitial.setAttribute('aria-hidden','false');
-      const tShowSkip = setTimeout(()=> interstitialSkip.style.display='inline-block', 3000);
-      const t = setTimeout(()=> {
-        interstitial.style.display = 'none'; interstitial.setAttribute('aria-hidden','true');
-        interstitialSkip.style.display = 'none';
-        setStream();
-        clearTimeout(tShowSkip);
-      }, 7000);
-      interstitialSkip.onclick = ()=> { clearTimeout(t); clearTimeout(tShowSkip); interstitial.style.display='none'; interstitial.setAttribute('aria-hidden','true'); interstitialSkip.style.display='none'; setStream(); };
-    }
+  // ------------------- DETAILS MODAL -------------------
+  async function openDetails(item){
+    currentItem = item;
+    const type = (item.media_type === 'tv' || item.first_air_date) ? 'tv' : 'movie';
 
-    function showStartupInterstitial(){
-      if(interstitialShownThisSession) return;
-      interstitial.style.display = 'flex';
-      interstitial.setAttribute('aria-hidden','false');
-      setTimeout(()=> interstitialSkip.style.display='inline-block', 2500);
-      const t = setTimeout(()=> { interstitial.style.display = 'none'; interstitialSkip.style.display = 'none'; interstitial.setAttribute('aria-hidden','true'); }, 4000);
-      interstitialSkip.onclick = ()=> { clearTimeout(t); interstitial.style.display = 'none'; interstitialSkip.style.display = 'none'; interstitial.setAttribute('aria-hidden','true'); };
-    }
+    modalImage.src = item.poster_path ? (IMG_ORIG + item.poster_path) : 'https://via.placeholder.com/500x750.png?text=No+Image';
+    modalTitle.textContent = item.title || item.name || 'Untitled';
+    modalOverview.textContent = item.overview || 'No description available.';
+    modalRating.textContent = (item.vote_average || 0).toFixed(1);
+    modalAdd.innerHTML = isInMyList(item) ? '✓ Added' : '<i class="fa fa-plus"></i> Add to My List';
+    modalAdd.setAttribute('aria-pressed', isInMyList(item) ? 'true' : 'false');
+    modalAdd.onclick = () => toggleMyList(item);
 
-    /* -------------------------
-       MY LIST (localStorage)
-       ------------------------- */
-    function getMyList(){ try{ return JSON.parse(localStorage.getItem('czar_mylist') || '[]'); } catch(e){ return []; } }
-    function saveMyList(list){ localStorage.setItem('czar_mylist', JSON.stringify(list)); }
-    function isInMyList(item){ const list = getMyList(); return list.some(i=> i.id === item.id); }
-    function toggleMyList(item){
-      const list = getMyList();
-      const exists = list.some(i=> i.id === item.id);
-      if(exists){
-        const updated = list.filter(i=> i.id !== item.id);
-        saveMyList(updated);
-        if(modalAdd) modalAdd.innerHTML = '<i class="fa fa-plus"></i> Add to My List';
-        if(modalAdd) modalAdd.setAttribute('aria-pressed','false');
+    // Cast
+    modalCast.innerHTML = '';
+    try{
+      const credits = await getCredits(type, item.id);
+      (credits.cast || []).slice(0,8).forEach(c=>{
+        const p = document.createElement('div'); p.className='person';
+        const img = document.createElement('img'); img.src = c.profile_path ? (IMG_W500 + c.profile_path) : 'https://via.placeholder.com/72x72?text=No';
+        img.alt = c.name;
+        const nm = document.createElement('div'); nm.className='name'; nm.textContent = c.name;
+        p.appendChild(img); p.appendChild(nm); modalCast.appendChild(p);
+      });
+    }catch(e){ console.warn('credits', e); }
+
+    // Videos (trailer)
+    trailerFrame.src = '';
+    try{
+      const vids = await getVideos(type, item.id);
+      const yt = (vids || []).find(v=> v.site === 'YouTube' && /trailer/i.test(v.type)) || (vids || []).find(v=> v.site === 'YouTube');
+      if(yt) trailerFrame.src = `https://www.youtube.com/embed/${yt.key}?autoplay=0&rel=0`;
+      else trailerFrame.src = '';
+    }catch(e){ console.warn('videos', e); trailerFrame.src = ''; }
+
+    // clear stream
+    streamFrame.src = '';
+
+    // open modal (manage focus)
+    lastFocusedEl = document.activeElement;
+    modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
+    // focus close button for accessibility
+    setTimeout(()=> modalClose.focus(), 50);
+  }
+
+  function closeModal(){
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    trailerFrame.src = ''; streamFrame.src = '';
+    if(lastFocusedEl) lastFocusedEl.focus();
+  }
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modal) modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+  // Tabs (trailer/watch)
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=> { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      document.querySelectorAll('.tab-content').forEach(c=> c.classList.remove('active'));
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      const tab = (btn.dataset.tab || btn.textContent).toLowerCase();
+      if(tab.includes('trailer')) {
+        document.getElementById('trailerTab').classList.add('active');
+        document.getElementById('watchTab').setAttribute('aria-hidden','true');
+        streamFrame.src='';
       } else {
-        list.push(item);
-        saveMyList(list);
-        if(modalAdd) modalAdd.innerHTML = '✓ Added';
-        if(modalAdd) modalAdd.setAttribute('aria-pressed','true');
+        document.getElementById('watchTab').classList.add('active');
+        document.getElementById('watchTab').removeAttribute('aria-hidden');
+        document.getElementById('trailerTab').setAttribute('aria-hidden','true');
+        showInterstitialThenStream();
       }
-      renderMyList();
-    }
-    function renderMyList(){
-      const list = getMyList();
-      myListContainer.innerHTML = '';
-      if(list.length === 0){ myListContainer.innerHTML = '<div style="opacity:.7;padding:18px">Your list is empty.</div>'; return; }
-      list.forEach(it => myListContainer.appendChild(makeCard(it)));
-    }
+    });
+  });
 
-    /* -------------------------
-       SEARCH (text + voice)
-       ------------------------- */
+  if (serverSelect) serverSelect.addEventListener('change', setStream);
+
+  function setStream(){
+    if(!currentItem) return;
+    const type = (currentItem.media_type === 'tv' || currentItem.first_air_date) ? 'tv' : 'movie';
+    const server = serverSelect.value;
+    let url = '';
+    // Note: these embed urls are placeholders — update to match your streaming provider integration
+    if(server === 'vidsrc.cc') url = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+    else if(server === 'vidsrc.me') url = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+    else if(server === 'player.videasy.net') url = `https://player.videasy.net/${type}/${currentItem.id}`;
+    streamFrame.src = url;
+  }
+
+  // ------------------- INTERSTITIAL -------------------
+  let interstitialShownThisSession = sessionStorage.getItem('czar_interstitial_shown') === '1';
+  function showInterstitialThenStream(){
+    if(!interstitial) { setStream(); return; }
+    // Show interstitial only once per session for better UX
+    if(interstitialShownThisSession){ setStream(); return; }
+    interstitialShownThisSession = true; sessionStorage.setItem('czar_interstitial_shown','1');
+    interstitial.style.display = 'flex'; interstitial.setAttribute('aria-hidden','false');
+    // show skip after 3s
+    const tShowSkip = setTimeout(()=> interstitialSkip.style.display='inline-block', 3000);
+    const t = setTimeout(()=> {
+      interstitial.style.display = 'none'; interstitial.setAttribute('aria-hidden','true');
+      interstitialSkip.style.display = 'none';
+      setStream();
+      clearTimeout(tShowSkip);
+    }, 7000);
+    interstitialSkip.onclick = ()=> { clearTimeout(t); clearTimeout(tShowSkip); interstitial.style.display='none'; interstitial.setAttribute('aria-hidden','true'); interstitialSkip.style.display='none'; setStream(); };
+  }
+
+  // On startup we may show a short interstitial to welcome user (respect session)
+  function showStartupInterstitial(){
+    if(interstitialShownThisSession) return;
+    interstitial.style.display = 'flex';
+    interstitial.setAttribute('aria-hidden','false');
+    setTimeout(()=> interstitialSkip.style.display='inline-block', 2500);
+    const t = setTimeout(()=> { interstitial.style.display='none'; interstitialSkip.style.display='none'; interstitial.setAttribute('aria-hidden','true'); }, 4000);
+    interstitialSkip.onclick = ()=> { clearTimeout(t); interstitial.style.display='none'; interstitialSkip.style.display='none'; interstitial.setAttribute('aria-hidden','true'); };
+  }
+
+  // ------------------- MY LIST (localStorage) -------------------
+  function getMyList(){ try{ return JSON.parse(localStorage.getItem('czar_mylist') || '[]'); } catch(e){ return []; } }
+  function saveMyList(list){ localStorage.setItem('czar_mylist', JSON.stringify(list)); }
+
+  function isInMyList(item){ const list = getMyList(); return list.some(i=> i.id === item.id); }
+
+  function toggleMyList(item){
+    const list = getMyList();
+    const exists = list.some(i=> i.id === item.id);
+    if(exists){
+      const updated = list.filter(i=> i.id !== item.id);
+      saveMyList(updated);
+      if(modalAdd) modalAdd.innerHTML = '<i class="fa fa-plus"></i> Add to My List';
+      if(modalAdd) modalAdd.setAttribute('aria-pressed','false');
+    } else {
+      list.push(item);
+      saveMyList(list);
+      if(modalAdd) modalAdd.innerHTML = '✓ Added';
+      if(modalAdd) modalAdd.setAttribute('aria-pressed','true');
+    }
+    renderMyList();
+  }
+
+  function renderMyList(){
+    const list = getMyList();
+    myListContainer.innerHTML = '';
+    if(list.length === 0){ myListContainer.innerHTML = '<div style="opacity:.7;padding:18px">Your list is empty.</div>'; return; }
+    list.forEach(it => myListContainer.appendChild(makeCardFromStored(it)));
+  }
+
+  // ------------------- SEARCH (text + voice) -------------------
+  let searchTimer = null;
+  if (searchBar) {
     const doSearchDebounced = debounce(async (q)=> {
       if(!q) return;
-      // Attempt TMDB search, if fails fallback to sample
       try{
         const json = await fetchJSON(`${TMDB_BASE}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(q)}&page=1`);
         const results = (json.results || []).filter(r => r.poster_path || r.backdrop_path).slice(0,24);
-        if(results.length){
-          renderList(moviesList, results);
-          setBanner(results[0]);
-          return;
-        }
-      }catch(e){ /* ignore */ }
-      // fallback
-      const results = SAMPLE_MOVIES.filter(m => (m.title || '').toLowerCase().includes(q.toLowerCase()));
-      renderList(moviesList, results.slice(0,24));
-      if(results.length) setBanner(results[0]);
+        renderList(moviesList, results);
+        if(results.length) setBanner(results[0]);
+      }catch(e){ console.error('search error', e); }
     }, 450);
 
-    if (searchBar) {
-      searchBar.addEventListener('input', (e)=> {
-        const q = e.target.value.trim();
-        if(!q) return;
-        doSearchDebounced(q);
-      });
+    searchBar.addEventListener('input', (e)=> {
+      const q = e.target.value.trim();
+      doSearchDebounced(q);
+    });
 
-      // Voice recognition support
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-      if(SpeechRec){
-        const rec = new SpeechRec();
-        rec.lang = 'en-US'; rec.interimResults = false; rec.continuous = false;
-        searchBar.addEventListener('dblclick', ()=> rec.start());
-        rec.onresult = (ev) => {
-          const text = ev.results[0][0].transcript;
-          searchBar.value = text;
-          doSearchDebounced(text);
-        };
-        rec.onerror = (err) => console.warn('voice err', err);
-      }
+    // Voice recognition (if available)
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    if(SpeechRec){
+      const rec = new SpeechRec();
+      rec.lang = 'en-US'; rec.interimResults = false; rec.continuous = false;
+      // double-click input to start voice capture (hint in placeholder)
+      searchBar.addEventListener('dblclick', ()=> rec.start());
+      const voiceToggle = document.getElementById('voiceToggle');
+      if(voiceToggle) voiceToggle.addEventListener('click', ()=> rec.start());
+      rec.onresult = (ev) => {
+        const text = ev.results[0][0].transcript;
+        searchBar.value = text;
+        doSearchDebounced(text);
+      };
+      rec.onerror = (err) => console.warn('voice err', err);
     }
+  }
 
-    /* -------------------------
-       GENRES & CONTENT LOAD
-       ------------------------- */
-    async function initGenres(){
-      // Minimal local list; TMDB can supply a fuller list if desired
-      const genres = [
-        {id:28, name:'Action'}, {id:12, name:'Adventure'}, {id:16, name:'Animation'}, {id:35, name:'Comedy'},
-        {id:80, name:'Crime'}, {id:18, name:'Drama'}, {id:10749, name:'Romance'}, {id:878, name:'Sci-Fi'}
-      ];
+  // ------------------- GENRES & CONTENT -------------------
+  async function initGenres(){
+    try{
+      const json = await fetchJSON(`${TMDB_BASE}/genre/movie/list?api_key=${TMDB_API_KEY}`);
+      const genres = json.genres || [];
       if(!genreFilter) return;
       genreFilter.innerHTML = '';
       const allChip = document.createElement('div'); allChip.className='chip active'; allChip.textContent = 'All';
-      allChip.addEventListener('click', ()=> { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); allChip.classList.add('active'); loadContent(true); });
+      allChip.addEventListener('click', ()=> { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); allChip.classList.add('active'); activeGenre = null; loadContent(true); });
       genreFilter.appendChild(allChip);
-      genres.forEach(g=>{
-        const chip = document.createElement('div'); chip.className='chip'; chip.textContent = g.name;
-        chip.addEventListener('click', ()=> {
-          document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-          chip.classList.add('active');
-          loadContent(true, g.id);
-        });
-        genreFilter.appendChild(chip);
-      });
-    }
-
-    async function loadContent(reset=false, genreId=null){
-      if(reset) { moviesList.innerHTML=''; }
-      // Try TMDB trending; fallback to sample
-      try{
-        const movies = await fetchJSON(`${TMDB_BASE}/trending/movie/day?api_key=${TMDB_API_KEY}`);
-        if(movies && movies.results && movies.results.length){
-          renderList(moviesList, movies.results.slice(0,40));
-          setBanner(movies.results[0]);
-        } else {
-          throw new Error('no movies');
-        }
-      }catch(e){
-        // fallback to sample
-        renderList(moviesList, SAMPLE_MOVIES.slice(0,40));
-        setBanner(SAMPLE_MOVIES[0]);
-      }
-
-      // tv
-      try{
-        const tv = await fetchJSON(`${TMDB_BASE}/trending/tv/day?api_key=${TMDB_API_KEY}`);
-        if(tv && tv.results) renderList(tvList, tv.results.slice(0,24));
-      }catch(e){
-        // sample clones
-        renderList(tvList, SAMPLE_MOVIES.filter((_,i)=>i%4===0).slice(0,24));
-      }
-
-      // anime (sample)
-      renderList(animeList, SAMPLE_MOVIES.filter((_,i)=>i%3===0).slice(0,24));
-      // filipino (sample)
-      renderList(filipinoList, SAMPLE_MOVIES.filter((_,i)=>i%7===0).slice(0,24));
-    }
-
-    /* -------------------------
-       AD MANAGER (placeholders already used; allow optional external providers)
-       ------------------------- */
-    const AD_PROVIDERS = []; // if you want to auto-load providers, add URLs here
-    function initAds(){
-      if(AD_PROVIDERS.length){
-        AD_PROVIDERS.forEach(src=>{
-          const s = document.createElement('script'); s.src = src; s.async = true; document.body.appendChild(s);
-        });
-      }
-      // Fill empty ad containers with friendly placeholder
-      document.querySelectorAll('[data-ad-container]').forEach(c=>{
-        if(!c.innerHTML.trim()){
-          c.innerHTML = `<div class="ad-fallback"><img src="https://via.placeholder.com/728x90.png?text=Ad+Banner" alt="Ad placeholder"/><a href="#">Sponsor</a></div>`;
-        }
-      });
-    }
-
-    /* -------------------------
-       INITIALIZATION
-       ------------------------- */
-    async function init(){
-      await initGenres();
-      await loadContent(true);
-      renderMyList();
-      initAds();
-      showStartupInterstitial();
-      // resize handling for side-ads
-      function handleResize(){ if(window.innerWidth < 1024){ document.querySelectorAll('.side-ads').forEach(s=>s.style.display='none'); } else { document.querySelectorAll('.side-ads').forEach(s=>s.style.display='flex'); } }
-      window.addEventListener('resize', handleResize); handleResize();
-      // hamburger
-      if(hamburger) hamburger.addEventListener('click', ()=> {
-        const open = mobileMenu.style.display==='block';
-        mobileMenu.style.display = open? 'none':'block';
-        hamburger.setAttribute('aria-expanded', String(!open));
-        mobileMenu.setAttribute('aria-hidden', String(open));
-      });
-
-      // demo: populate additional sample content to increase file size and richness
-      populateExtraSections();
-    }
-
-    // small helper: populate extra sections for UI richness (also increases overall file content usage)
-    function populateExtraSections(){
-      // popular, upcoming, top rated use the sample array
-      const pop = SAMPLE_MOVIES.slice(10,40);
-      const up = SAMPLE_MOVIES.slice(40,70);
-      const tr = SAMPLE_MOVIES.slice(70,100);
-      // create UI cards manually into corresponding sections if they exist
-      if(popularList) renderList(popularList, pop);
-      if(upcomingList) renderList(upcomingList, up);
-      if(topRatedList) renderList(topRatedList, tr);
-    }
-
-    // kick off init
-    if(document.readyState!=='loading') init();
-    else document.addEventListener('DOMContentLoaded', init);
-
-    // expose some debugging utilities
-    window.CzarVision = { init, loadContent, SAMPLE_MOVIES };
-
-  })();
-  </script>
-
-  <!-- ======================================================================================
-       FINAL: insert the Pro Ads script once more before the closing body tag so it runs last.
-       This is the same verbatim code you provided.
-       ====================================================================================== -->
-<script type="text/javascript" data-cfasync="false">
-/*<![CDATA[/* */
-(function(){var j=window,m="ec758f609280f9b2e74c7583446c3701",i=[["siteId",988-157-631+35+5240635],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],x=["d3d3LmludGVsbGlwb3B1cC5jb20vaGF2YWxvbi5taW4uY3Nz","ZDNtcjd5MTU0ZDJxZzUuY2xvdWRmcm9udC5uZXQvQWhYdmwvaXBoZXJ5Lm1pbi5qcw=="],n=-1,d,g,b=function(){clearTimeout(g);n++;if(x[n]&&!(1784954179000<(new Date).getTime()&&1<n)){d=j.document.createElement("script");d.type="text/javascript";d.async=!0;var o=j.document.getElementsByTagName("script")[0];d.src="https://"+atob(x[n]);d.crossOrigin="anonymous";d.onerror=b;d.onload=function(){clearTimeout(g);j[m.slice(0,16)+m.slice(0,16)]||b()};g=setTimeout(b,5E3);o.parentNode.insertBefore(d,o)}};if(!j[m]){try{Object.freeze(j[m]=i)}catch(e){}b()}})();
-/*]]>/* */
-</script>
-
-</body>
-</html>
+      genres.slice(0,8).forEach(g=>{
+        const chip = document.createElement('div'); chip.className
